@@ -27,6 +27,9 @@ double read_timer( )
 int build_table( int nitems, int cap, int *T, int *w, int *v )
 {
   int wj = w[0], vj = v[0];
+
+  printf("wj is %d \n", wj);
+
   for( int i = 0;  i <  wj;  i++ ) T[i] = 0;
   for( int i = wj; i <= cap; i++ ) T[i] = vj;
     
@@ -60,14 +63,14 @@ int main (int argc, char** argv)
 {
 
   printf("test result \n");
-  srand48( (unsigned int)time(NULL) );
+  srand48( (unsigned int)time(NULL) ); // Generates a sequence of 48-bit ints
     
   //these constants have little effect on runtime
   int max_value  = 1000;
   int max_weight = 1000;
     
   //these set the problem size
-  int capacity   = 999;
+  int capacity   = 999; // Max weight that bag can hold 
   int nitems     = 5000;
     
   //allocate arrays
@@ -93,7 +96,7 @@ int main (int argc, char** argv)
   double seconds = read_timer( );
 
   int best_value = build_table( nitems, capacity, total, weight, value );
-  backtrack( nitems, capacity, total, weight, used );
+  backtrack( nitems, capacity, total, weight, used ); // total,weight,used arrays may be changed
 
   seconds = read_timer( ) - seconds;
         

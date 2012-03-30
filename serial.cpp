@@ -59,8 +59,6 @@ void backtrack( int nitems, int cap, int *T, int *w, int *u )
 int main (int argc, char** argv)
 {
 
-  fprintf( stderr, "Test result \n" );
-
   printf("test result \n");
   srand48( (unsigned int)time(NULL) );
     

@@ -3,6 +3,7 @@
 #PBS -l mppnppn=1
 #PBS -j oe
 #PBS -V
+#PBS -o serial.stdout
 
 cd $PBS_O_WORKDIR
 aprun -n 1 -N 1 ./serial

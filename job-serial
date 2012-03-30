@@ -6,4 +6,4 @@
 #PBS -o serial.stdout
 
 cd $PBS_O_WORKDIR
-aprun -n 1 -N 1 ./serial
+aprun -n 1 -N 1 ./serial -o serial.txt

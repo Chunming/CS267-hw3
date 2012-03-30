@@ -42,7 +42,7 @@ int build_table( int nitems, int cap, int *T, int *w, int *v )
       T += cap+1;
     }
     
-  return T[cap];
+  return T[cap]; // Max value attained
 }
 
 void backtrack( int nitems, int cap, int *T, int *w, int *u )
@@ -50,7 +50,7 @@ void backtrack( int nitems, int cap, int *T, int *w, int *u )
   int i = nitems*(cap+1) - 1;
   for( int j = nitems-1; j > 0; j-- )
     {
-      u[j] = T[i] != T[i-cap-1];
+      u[j] = T[i] != T[i-cap-1]; // Is the jth item used?
       i -= cap+1 + (u[j] ? w[j] : 0 );
     }
   u[0] = T[i] != 0;
@@ -62,6 +62,9 @@ void backtrack( int nitems, int cap, int *T, int *w, int *u )
 int main (int argc, char** argv)
 {
 
+  char *savename = read_string( argc, argv, "-o", NULL );
+  FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
+  
   printf("test result \n");
   srand48( (unsigned int)time(NULL) ); // Generates a sequence of 48-bit ints
     
@@ -115,7 +118,23 @@ int main (int argc, char** argv)
     printf( "INVALID SOLUTION\n" );
     
   printf( "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
-    
+
+  if( fsave ) {
+    fprintf(fsave, "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
+
+    for (int j=0; j<nitems; j++) {
+      fprintf( fsave, "Index %d: %d %d %d\n", j, u[j], w[j], v[j]); // Print used, weight, value array
+    }
+
+    for (int j=0; j<(nitems * (capacity+1)); j++) {
+      fprintf( fsave, "Index %d: %d\n", total[j]); // Print total array
+    }
+
+    fclose( fsave );
+
+  }
+
+
   //release resources
   free( weight );
   free( value );

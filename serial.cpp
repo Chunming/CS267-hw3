@@ -21,6 +21,17 @@ double read_timer( )
   return (end.tv_sec - start.tv_sec) + 1.0e-6 * (end.tv_usec - start.tv_usec);
 }
 
+
+char *read_string( int argc, char **argv, const char *option, char *default_value )
+{
+  int iplace = find_option( argc, argv, option );
+    if( iplace >= 0 && iplace < argc-1 )
+      return argv[iplace+1];
+    return default_value;
+}
+
+
+
 //
 //  solvers
 //
@@ -123,7 +134,7 @@ int main (int argc, char** argv)
     fprintf(fsave, "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
 
     for (int j=0; j<nitems; j++) {
-      fprintf( fsave, "Index %d: %d %d %d\n", j, u[j], w[j], v[j]); // Print used, weight, value array
+      fprintf( fsave, "Index %d: %d %d %d\n", j, used[j], weight[j], value[j]);
     }
 
     for (int j=0; j<(nitems * (capacity+1)); j++) {

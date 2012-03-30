@@ -21,6 +21,14 @@ double read_timer( )
   return (end.tv_sec - start.tv_sec) + 1.0e-6 * (end.tv_usec - start.tv_usec);
 }
 
+int find_option( int argc, char **argv, const char *option )
+{
+  for( int i = 1; i < argc; i++ )
+    if( strcmp( argv[i], option ) == 0 )
+      return i;
+  return -1;
+}
+
 
 char *read_string( int argc, char **argv, const char *option, char *default_value )
 {

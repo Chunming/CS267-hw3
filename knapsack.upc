@@ -121,6 +121,10 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
     return best;
 }
 
+
+shared int* [*] sharedMem = upc_all_alloc(100, sizeof(int));
+
+
 //
 //  benchmarking program
 //

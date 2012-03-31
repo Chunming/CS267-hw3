@@ -133,7 +133,7 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 //
 //  benchmarking program
 //
-shared [1000] int weightLoc[1000];
+shared [1000] int weightLoc[1000*THREADS];
 
 // No. of threads is 4 by default
 

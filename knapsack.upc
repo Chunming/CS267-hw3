@@ -208,7 +208,7 @@ int main( int argc, char** argv )
     // time the solution
     seconds = read_timer( );
     
-    best_value = build_table( nitems, capacity, tot(l, weight, value );
+    best_value = build_table( nitems, capacity, total, weight, value );
     backtrack( nitems, capacity, total, weight, used );
     
     seconds = read_timer( ) - seconds;

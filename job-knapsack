@@ -3,6 +3,7 @@
 #PBS -l mppnppn=1
 #PBS -j oe
 #PBS -V
+#PBS -o upc.stdout
 
 cd $PBS_O_WORKDIR
-aprun -n 4 -N 1 ./knapsack
+aprun -n 4 -N 1 ./knapsack -o upc.txt

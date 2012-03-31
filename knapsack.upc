@@ -133,7 +133,7 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 //
 //  benchmarking program
 //
-shared [3] int* foo;
+shared [1000] int weightLoc[1000];
 
 // No. of threads is 4 by default
 
@@ -186,6 +186,10 @@ int main( int argc, char** argv )
          value[i]  = 1 + (lrand48()%max_value);
        }
     }
+
+    upc_barrier;
+
+    upc_memget(weightLoc, weight, 1000*sizeof(int));
 
     upc_barrier;
 

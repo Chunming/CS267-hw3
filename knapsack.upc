@@ -168,26 +168,6 @@ int main( int argc, char** argv )
     }
 
 
-    // Test random assignment on thread 0
-    int *weight1;
-    int *value1;
-    int *used1;
-    int *total1;
-    if (MYTHREAD == 0) {
-       printf("In Special Thread test \n");
-
-       weight1 = (int*)malloc( nitems * sizeof(int) );
-       value1  = (int*)malloc( nitems * sizeof(int) );
-       used1   = (int*)malloc( nitems * sizeof(int) );
-       total1  = (int*)malloc( nitems * (capacity+1) * sizeof(int) );
-
-       for( int i = 0; i < nitems; i++ ) {
-         weight1[i] = 1 + (lrand48()%max_weight);
-         value1[i]  = 1 + (lrand48()%max_value);
-       }
-
-
-    }
 
 
     //FIX: 
@@ -206,11 +186,29 @@ int main( int argc, char** argv )
 
 
 
+    // Test random assignment on thread 0
+    // Using upc_forall on this part is wrong
+    int *weight1;
+    int *value1;
+    if (MYTHREAD == 0) {
+       printf("In Special Thread test \n");
+
+       weight1 = (int*)malloc( nitems * sizeof(int) );
+       value1  = (int*)malloc( nitems * sizeof(int) );
+
+       for( int i = 0; i < nitems; i++ ) {
+         weight1[i] = 1 + (lrand48()%max_weight);
+         value1[i]  = 1 + (lrand48()%max_value);
+       }
+    }
+
+
+
     
     // time the solution
     seconds = read_timer( );
     
-    best_value = build_table( nitems, capacity, total, weight, value );
+    best_value = build_table( nitems, capacity, tot(l, weight, value );
     backtrack( nitems, capacity, total, weight, used );
     
     seconds = read_timer( ) - seconds;

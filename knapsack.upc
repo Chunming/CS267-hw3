@@ -198,7 +198,7 @@ int main( int argc, char** argv )
        }
     }
 
-    upc_barrier
+    upc_barrier;
 
     
     // time the solution

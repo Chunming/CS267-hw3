@@ -129,8 +129,8 @@ int main( int argc, char** argv )
    char *savename = read_string( argc, argv, "-o", NULL );
    FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
 
-    printf("No. of threads is %d \n", THREADS);
-    printf("Current thread is %d \n", MYTHREAD);
+    printf("1: No. of threads is %d \n", THREADS);
+    printf("2: Current thread is %d \n", MYTHREAD);
  
     int i, best_value, best_value_serial, total_weight, nused, total_value;
     double seconds;
@@ -168,6 +168,9 @@ int main( int argc, char** argv )
     max_weight = min( max_weight, capacity );//don't generate items that don't fit into bag
     upc_forall( i = 0; i < nitems; i++; i )
     {
+
+        printf("2: No. of threads is %d \n", THREADS);
+
         weight[i] = 1 + (lrand48()%max_weight);
         value[i]  = 1 + (lrand48()%max_value);
     }

@@ -1,0 +1,20 @@
+Warning: no access to tty (Bad file descriptor).
+Thus no job control in this shell.
+
+ + --------------------------------------------------------------------------
+ +        Job name: job-knapsack
+ +          Job Id: 7552939.nid00003
+ +          System: franklin
+ +     Queued Time: Sat Mar 31 00:01:23 2012
+ +      Start Time: Sat Mar 31 00:01:56 2012
+ + Completion Time: Sat Mar 31 00:01:58 2012
+ +            User: cmchin
+ +        MOM Host: nid04099
+ +           Queue: debug
+ +  Req. Resources: other=QSUBPID:29182:nid00256,walltime=00:10:00
+ +  Used Resources: cput=00:00:00,mem=0kb,vmem=0kb,walltime=00:00:01
+ +     Acct String: mp309
+ +   PBS_O_WORKDIR: /global/homes/c/cmchin/franklin/CS267-hw3
+ +     Submit Args: job-knapsack
+ + --------------------------------------------------------------------------
+

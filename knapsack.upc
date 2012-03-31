@@ -61,7 +61,7 @@ int build_table( int nitems, int cap, shared int *T, shared int *w, shared int *
         vj = v[j];
         upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) { 
 	  T[i+cap+1] = T[i];
-	  printf("Thread no. is %d \n", upc_threadof(&T[i]));
+	  //printf("Thread no. is %d \n", upc_threadof(&T[i]));
 	}
         upc_forall( int i = wj; i <= cap; i++; &T[i] ) {
 	  T[i+cap+1] = max( T[i], T[i-wj]+vj );
@@ -160,10 +160,10 @@ int main( int argc, char** argv )
     srand48( 1000 );    
 
     //allocate distributed arrays, use cyclic distribution
-    weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    total  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
+    weight = (shared [1000] int *) upc_all_alloc( nitems, sizeof(int) );
+    value  = (shared [1000] int *) upc_all_alloc( nitems, sizeof(int) );
+    used   = (shared [1000] int *) upc_all_alloc( nitems, sizeof(int) );
+    total  = (shared [1000] int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
     if( !weight || !value || !total || !used )
     {
         fprintf( stderr, "Failed to allocate memory" );

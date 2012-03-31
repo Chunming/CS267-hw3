@@ -150,8 +150,8 @@ int main( int argc, char** argv )
     int max_weight = 1000;
     
     //these set the problem size
-    int capacity   = 9; //999;
-    int nitems     = 100; //5000;
+    int capacity   = 999;
+    int nitems     = 5000;
     
     //srand48( (unsigned int)time(NULL) + MYTHREAD );
     srand48( 1000 );    
@@ -169,8 +169,10 @@ int main( int argc, char** argv )
 
     //FIX: 
     upc_barrier;
-    
+   
+    // 
     // Init. Prepare arrays in thread 0
+    //
     max_weight = min( max_weight, capacity );//do not generate items that don't fit into bag
     if (MYTHREAD == 0) {
        for( int i = 0; i < nitems; i++ ) {

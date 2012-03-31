@@ -163,10 +163,10 @@ int main( int argc, char** argv )
     srand48( 1000 );    
 
     //allocate distributed arrays, use cyclic distribution
-    weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    total  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
+    weight = (shared int *) upc_all_alloc( nitems, 1000*sizeof(int) );
+    value  = (shared int *) upc_all_alloc( nitems, 1000*sizeof(int) );
+    used   = (shared int *) upc_all_alloc( nitems, 1000*sizeof(int) );
+    total  = (shared int *) upc_all_alloc( nitems * (capacity+1), 1000*sizeof(int) );
     if( !weight || !value || !total || !used )
     {
         fprintf( stderr, "Failed to allocate memory" );

@@ -147,8 +147,9 @@ int main( int argc, char** argv )
     int capacity   = 9; //999;
     int nitems     = 100; //5000;
     
-    srand48( (unsigned int)time(NULL) + MYTHREAD );
-    
+    //srand48( (unsigned int)time(NULL) + MYTHREAD );
+    srand48( 1000 );    
+
     //allocate distributed arrays, use cyclic distribution
     weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );

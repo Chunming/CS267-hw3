@@ -182,9 +182,6 @@ int main( int argc, char** argv )
          value1[i]  = 1 + (lrand48()%max_value);
        }
 
-      for (int j=0; j<nitems; j++) {
-        fprintf( fsave, "Index %d: %d %d\n", j, weight[j], value[j]);
-      }
 
     }
 
@@ -243,6 +240,14 @@ int main( int argc, char** argv )
 
     if( fsave ) {
       fprintf(fsave, "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
+
+      if (MYTHREAD == 0) {
+        for (int j=0; j<nitems; j++) {
+          fprintf( fsave, "Index %d: %d %d\n", j, weight1[j], value1[j]);
+        }
+      }
+
+
       //for (int j=0; j<nitems; j++) {
       //  fprintf( fsave, "Index %d: %d %d\n", j, weight[j], value[j]);
       //}

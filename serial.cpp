@@ -49,8 +49,6 @@ int build_table( int nitems, int cap, int *T, int *w, int *v )
 {
   int wj = w[0], vj = v[0];
 
-  printf("wj is %d \n", wj);
-
   for( int i = 0;  i <  wj;  i++ ) T[i] = 0;
   for( int i = wj; i <= cap; i++ ) T[i] = vj;
     
@@ -86,7 +84,6 @@ int main (int argc, char** argv)
   char *savename = read_string( argc, argv, "-o", NULL );
   FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
   
-  printf("test result \n");
   //srand48( (unsigned int)time(NULL) ); // Generates a sequence of 48-bit ints
   srand48( 1000 ); // Modified srand 
 

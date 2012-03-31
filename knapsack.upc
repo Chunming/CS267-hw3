@@ -130,13 +130,11 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 //
 shared [3] int* foo;
 
+// No. of threads is 4 by default
 int main( int argc, char** argv )
 {
    char *savename = read_string( argc, argv, "-o", NULL );
    FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
-
-    printf("1: No. of threads is %d \n", THREADS);
-    printf("2: Current thread is %d \n", MYTHREAD);
  
     int i, best_value, best_value_serial, total_weight, nused, total_value;
     double seconds;

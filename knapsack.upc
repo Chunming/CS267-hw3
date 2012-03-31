@@ -137,10 +137,10 @@ shared [3] int* foo;
 
 // No. of threads is 4 by default
 
-    shared int *weight;
-    shared int *value;
-    shared int *used;
-    shared int *total;
+    shared [1000] int *weight;
+    shared [1000] int *value;
+    shared [1000] int *used;
+    shared [1000] int *total;
 
 
 int main( int argc, char** argv )

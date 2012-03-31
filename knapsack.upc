@@ -128,6 +128,8 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 //
 //  benchmarking program
 //
+shared [3] int* foo;
+
 int main( int argc, char** argv )
 {
    char *savename = read_string( argc, argv, "-o", NULL );
@@ -161,7 +163,7 @@ int main( int argc, char** argv )
     total  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
     if( !weight || !value || !total || !used )
     {
-        fprintf( stderr, "Failed to allocate memory" );
+fprintf( stderr, "Failed to allocate memory" );
         upc_global_exit( -1 );
     }
 
@@ -180,6 +182,9 @@ int main( int argc, char** argv )
         weight[i] = 1 + (lrand48()%max_weight);
         value[i]  = 1 + (lrand48()%max_value);
     }
+
+
+
     
     // time the solution
     seconds = read_timer( );
@@ -188,6 +193,11 @@ int main( int argc, char** argv )
     backtrack( nitems, capacity, total, weight, used );
     
     seconds = read_timer( ) - seconds;
+
+
+
+
+
     
     // check the result
     if( MYTHREAD == 0 )
@@ -213,12 +223,12 @@ int main( int argc, char** argv )
 
     if( fsave ) {
       fprintf(fsave, "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
-      for (int j=0; j<nitems; j++) {
-        fprintf( fsave, "Index %d: %d %d %d\n", j, used[j], weight[j], value[j]);
-      }
-      for (int j=0; j<(nitems * (capacity+1)); j++) {
-        fprintf( fsave, "Index %d: %d\n", total[j]); // Print total array
-      }
+      //for (int j=0; j<nitems; j++) {
+      //  fprintf( fsave, "Index %d: %d %d %d\n", j, used[j], weight[j], value[j]);
+      //}
+      //for (int j=0; j<(nitems * (capacity+1)); j++) {
+      //  fprintf( fsave, "Index %d: %d\n", total[j]); // Print total array
+      //}
       fclose( fsave );
     }
 

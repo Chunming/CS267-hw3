@@ -144,13 +144,12 @@ int main (int argc, char** argv)
   if( fsave ) {
     fprintf(fsave, "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
 
-    for (int j=0; j<nitems; j++) {
-      fprintf( fsave, "Index %d: %d %d %d\n", j, used[j], weight[j], value[j]);
-    }
-
-    for (int j=0; j<(nitems * (capacity+1)); j++) {
-      fprintf( fsave, "Index %d: %d\n", total[j]); // Print total array
-    }
+//    for (int j=0; j<nitems; j++) {
+//      fprintf( fsave, "Index %d: %d %d %d\n", j, used[j], weight[j], value[j]);
+//    }
+//    for (int j=0; j<(nitems * (capacity+1)); j++) {
+//      fprintf( fsave, "Index %d: %d\n", total[j]); // Print total array
+//    }
 
     fclose( fsave );
 

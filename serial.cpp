@@ -94,8 +94,8 @@ int main (int argc, char** argv)
   int max_weight = 1000;
     
   //these set the problem size
-  int capacity   = 999; // Max weight that bag can hold 
-  int nitems     = 5000;
+  int capacity   = 9 //999; // Max weight that bag can hold 
+  int nitems     = 100; //5000;
     
   //allocate arrays
   int *weight = (int*)malloc( nitems * sizeof(int) );

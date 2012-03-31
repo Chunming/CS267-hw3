@@ -61,7 +61,7 @@ int build_table( int nitems, int cap, shared int *T, shared int *w, shared int *
         vj = v[j];
         upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) { 
 	  T[i+cap+1] = T[i];
-	  //printf("Thread no. is %d \n", upc_threadof(&T[i]));
+	  printf("Thread no. is %d \n", upc_threadof(&T[i]));
 	}
         upc_forall( int i = wj; i <= cap; i++; &T[i] ) {
 	  T[i+cap+1] = max( T[i], T[i-wj]+vj );
@@ -137,10 +137,10 @@ shared [3] int* foo;
 
 // No. of threads is 4 by default
 
-    shared [*] int *weight;
-    shared [*] int *value;
-    shared [*] int *used;
-    shared [*] int *total;
+    shared int *weight;
+    shared int *value;
+    shared int *used;
+    shared int *total;
 
 
 int main( int argc, char** argv )

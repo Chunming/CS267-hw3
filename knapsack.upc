@@ -122,8 +122,17 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 }
 
 
-shared int* [*] sharedMem = upc_all_alloc(100, sizeof(int));
+//shared int* sharedMem = upc_all_alloc(100, sizeof(int));
 
+    weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
+    value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
+    used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
+    total  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
+    if( !weight || !value || !total || !used )
+    {
+        fprintf( stderr, "Failed to allocate memory" );
+        upc_global_exit( -1 );
+    }
 
 //
 //  benchmarking program
@@ -155,15 +164,6 @@ int main( int argc, char** argv )
     srand48( 1000 );    
 
     //allocate distributed arrays, use cyclic distribution
-    weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    total  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
-    if( !weight || !value || !total || !used )
-    {
-        fprintf( stderr, "Failed to allocate memory" );
-        upc_global_exit( -1 );
-    }
 
     //FIX: 
     upc_barrier;

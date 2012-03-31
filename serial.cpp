@@ -87,8 +87,9 @@ int main (int argc, char** argv)
   FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
   
   printf("test result \n");
-  srand48( (unsigned int)time(NULL) ); // Generates a sequence of 48-bit ints
-    
+  //srand48( (unsigned int)time(NULL) ); // Generates a sequence of 48-bit ints
+  srand48( 1000 ); // Modified srand 
+
   //these constants have little effect on runtime
   int max_value  = 1000;
   int max_weight = 1000;

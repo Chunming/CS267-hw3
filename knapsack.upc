@@ -167,31 +167,12 @@ int main( int argc, char** argv )
         upc_global_exit( -1 );
     }
 
-
-
-
     //FIX: 
     upc_barrier;
     
-    // init
+    // Init. Prepare arrays in thread 0
     max_weight = min( max_weight, capacity );//do not generate items that don't fit into bag
-    //upc_forall( i = 0; i < nitems; i++; i )
-    //{
-    //    weight[i] = 1 + (lrand48()%max_weight);
-    //    value[i]  = 1 + (lrand48()%max_value);
-    //}
-
-
-
-    // Test random assignment on thread 0
-    // Using upc_forall on this part is wrong
-    //int *weight1;
-    //int *value1;
     if (MYTHREAD == 0) {
-
-       //weight1 = (int*)malloc( nitems * sizeof(int) );
-       //value1  = (int*)malloc( nitems * sizeof(int) );
-
        for( int i = 0; i < nitems; i++ ) {
          weight[i] = 1 + (lrand48()%max_weight);
          value[i]  = 1 + (lrand48()%max_value);

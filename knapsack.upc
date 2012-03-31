@@ -163,17 +163,37 @@ int main( int argc, char** argv )
     total  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
     if( !weight || !value || !total || !used )
     {
-fprintf( stderr, "Failed to allocate memory" );
+        fprintf( stderr, "Failed to allocate memory" );
         upc_global_exit( -1 );
     }
 
+
+    // Test random assignment on thread 0
+    if (MYTHREAD == 0) {
+       printf("In Special Thread test \n");
+
+       int *weight1 = (int*)malloc( nitems * sizeof(int) );
+       int *value1  = (int*)malloc( nitems * sizeof(int) );
+       int *used1   = (int*)malloc( nitems * sizeof(int) );
+       int *total1  = (int*)malloc( nitems * (capacity+1) * sizeof(int) );
+
+       for( int i = 0; i < nitems; i++ ) {
+         weight1[i] = 1 + (lrand48()%max_weight);
+         value1[i]  = 1 + (lrand48()%max_value);
+       }
+
+      for (int j=0; j<nitems; j++) {
+        fprintf( fsave, "Index %d: %d %d\n", j, weight[j], value[j]);
+      }
+
+    }
 
 
     //FIX: 
     upc_barrier;
     
     // init
-    max_weight = min( max_weight, capacity );//don't generate items that don't fit into bag
+    max_weight = min( max_weight, capacity );//do not generate items that don't fit into bag
     upc_forall( i = 0; i < nitems; i++; i )
     {
 
@@ -223,9 +243,9 @@ fprintf( stderr, "Failed to allocate memory" );
 
     if( fsave ) {
       fprintf(fsave, "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
-      for (int j=0; j<nitems; j++) {
-        fprintf( fsave, "Index %d: %d %d\n", j, weight[j], value[j]);
-      }
+      //for (int j=0; j<nitems; j++) {
+      //  fprintf( fsave, "Index %d: %d %d\n", j, weight[j], value[j]);
+      //}
       //for (int j=0; j<(nitems * (capacity+1)); j++) {
       //  fprintf( fsave, "Index %d: %d\n", total[j]); // Print total array
       //}

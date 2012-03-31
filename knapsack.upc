@@ -123,7 +123,11 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 
 
 //shared int* sharedMem = upc_all_alloc(100, sizeof(int));
-
+    
+    shared int *weight;
+    shared int *value;
+    shared int *used;
+    shared int *total;
     weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
@@ -147,10 +151,6 @@ int main( int argc, char** argv )
  
     int i, best_value, best_value_serial, total_weight, nused, total_value;
     double seconds;
-    shared int *weight;
-    shared int *value;
-    shared int *used;
-    shared int *total;
     
     //these constants have little effect on runtime
     int max_value  = 1000;

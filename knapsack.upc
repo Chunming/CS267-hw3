@@ -136,6 +136,13 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 shared [3] int* foo;
 
 // No. of threads is 4 by default
+
+    shared int *weight;
+    shared int *value;
+    shared int *used;
+    shared int *total;
+
+
 int main( int argc, char** argv )
 {
    char *savename = read_string( argc, argv, "-o", NULL );
@@ -143,10 +150,6 @@ int main( int argc, char** argv )
  
     int i, best_value, best_value_serial, total_weight, nused, total_value;
     double seconds;
-    shared int *weight;
-    shared int *value;
-    shared int *used;
-    shared int *total;
     
     //these constants have little effect on runtime
     int max_value  = 1000;

@@ -169,13 +169,17 @@ int main( int argc, char** argv )
 
 
     // Test random assignment on thread 0
+    int *weight1;
+    int *value1;
+    int *used1;
+    int *total1;
     if (MYTHREAD == 0) {
        printf("In Special Thread test \n");
 
-       int *weight1 = (int*)malloc( nitems * sizeof(int) );
-       int *value1  = (int*)malloc( nitems * sizeof(int) );
-       int *used1   = (int*)malloc( nitems * sizeof(int) );
-       int *total1  = (int*)malloc( nitems * (capacity+1) * sizeof(int) );
+       weight1 = (int*)malloc( nitems * sizeof(int) );
+       value1  = (int*)malloc( nitems * sizeof(int) );
+       used1   = (int*)malloc( nitems * sizeof(int) );
+       total1  = (int*)malloc( nitems * (capacity+1) * sizeof(int) );
 
        for( int i = 0; i < nitems; i++ ) {
          weight1[i] = 1 + (lrand48()%max_weight);

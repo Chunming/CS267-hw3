@@ -134,6 +134,9 @@ int main( int argc, char** argv )
         fprintf( stderr, "Failed to allocate memory" );
         upc_global_exit( -1 );
     }
+
+    //FIX: 
+    upc_barrier;
     
     // init
     max_weight = min( max_weight, capacity );//don't generate items that don't fit into bag

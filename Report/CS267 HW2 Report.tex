@@ -17,7 +17,6 @@
 %\section{}
 %\subsection{}
 
-\section{Initializing the seed}
 
 
 
@@ -30,6 +29,11 @@ In order to compare answers accurately, we changed the srand function to have a 
 We do blocking operations on rows of T (i.e. operating on contiguous blocks of memory )  so as to increase cache hits. This would minimize communication time, hence making the code run faster. 
 
 Next, we also considered pipelining our computations, because an object, j, is only dependent on its previous object j-1.
+
+\section{Results}
+
+The time required for serial implementation is 0.031931
+The time required for upc implementation is 11.4287, 10.9262
 
 
 \end{document}  

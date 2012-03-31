@@ -175,34 +175,30 @@ int main( int argc, char** argv )
     
     // init
     max_weight = min( max_weight, capacity );//do not generate items that don't fit into bag
-    upc_forall( i = 0; i < nitems; i++; i )
-    {
-
-        printf("2: No. of threads is %d \n", THREADS);
-
-        weight[i] = 1 + (lrand48()%max_weight);
-        value[i]  = 1 + (lrand48()%max_value);
-    }
+    //upc_forall( i = 0; i < nitems; i++; i )
+    //{
+    //    weight[i] = 1 + (lrand48()%max_weight);
+    //    value[i]  = 1 + (lrand48()%max_value);
+    //}
 
 
 
     // Test random assignment on thread 0
     // Using upc_forall on this part is wrong
-    int *weight1;
-    int *value1;
+    //int *weight1;
+    //int *value1;
     if (MYTHREAD == 0) {
-       printf("In Special Thread test \n");
 
-       weight1 = (int*)malloc( nitems * sizeof(int) );
-       value1  = (int*)malloc( nitems * sizeof(int) );
+       //weight1 = (int*)malloc( nitems * sizeof(int) );
+       //value1  = (int*)malloc( nitems * sizeof(int) );
 
        for( int i = 0; i < nitems; i++ ) {
-         weight1[i] = 1 + (lrand48()%max_weight);
-         value1[i]  = 1 + (lrand48()%max_value);
+         weight[i] = 1 + (lrand48()%max_weight);
+         value[i]  = 1 + (lrand48()%max_value);
        }
     }
 
-
+    upc_barrier
 
     
     // time the solution
@@ -245,7 +241,7 @@ int main( int argc, char** argv )
 
       if (MYTHREAD == 0) {
         for (int j=0; j<nitems; j++) {
-          fprintf( fsave, "Index %d: %d %d\n", j, weight1[j], value1[j]);
+          fprintf( fsave, "Index %d: %d %d\n", j, weight[j], value[j]);
         }
       }
 

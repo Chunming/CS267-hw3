@@ -1,22 +1,22 @@
 Warning: no access to tty (Bad file descriptor).
 Thus no job control in this shell.
 test result 
-wj is 933 
-5000 items, capacity: 999, time: 0.026378
-92 items used, value 57698, weight 999
-Application 26583623 resources: utime 0, stime 0
+wj is 265 
+5000 items, capacity: 999, time: 0.026476
+84 items used, value 54334, weight 999
+Application 26583728 resources: utime 0, stime 0
 
  + --------------------------------------------------------------------------
  +        Job name: job-serial
- +          Job Id: 7552564.nid00003
+ +          Job Id: 7552578.nid00003
  +          System: franklin
- +     Queued Time: Fri Mar 30 15:46:47 2012
- +      Start Time: Fri Mar 30 15:47:06 2012
- + Completion Time: Fri Mar 30 15:47:10 2012
+ +     Queued Time: Fri Mar 30 15:56:53 2012
+ +      Start Time: Fri Mar 30 15:57:08 2012
+ + Completion Time: Fri Mar 30 15:57:12 2012
  +            User: cmchin
  +        MOM Host: nid04096
  +           Queue: debug
- +  Req. Resources: other=QSUBPID:29098:nid00235,walltime=00:10:00
+ +  Req. Resources: other=QSUBPID:29378:nid00235,walltime=00:10:00
  +  Used Resources: cput=00:00:00,mem=0kb,vmem=0kb,walltime=00:00:04
  +     Acct String: mp309
  +   PBS_O_WORKDIR: /global/homes/c/cmchin/franklin/CS267-hw3

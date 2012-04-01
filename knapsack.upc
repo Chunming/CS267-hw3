@@ -187,12 +187,6 @@ int main( int argc, char** argv )
     shared [1] int *global=NULL;
 
 
-    local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
-    for (int i=0;i<COUNT_PER_PE;i++) { 
-      local[i] = MYTHREAD;
-      printf("%d: local at %d is %d \n", MYTHREAD, i, local[i]);
-    }
-    upc_barrier;
 
 
    char *savename = read_string( argc, argv, "-o", NULL );
@@ -239,15 +233,23 @@ int main( int argc, char** argv )
     // Test segment
     //
 
+    local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
+    for (int i=0;i<COUNT_PER_PE;i++) { 
+      local[i] = MYTHREAD;
+      printf("%d: local at %d is %d \n", MYTHREAD, i, local[i]);
+    }
+    upc_barrier;
 
     size_t nBytes = sizeof(int) * THREADS * COUNT_PER_PE;
     global  = (shared int *) upc_all_alloc( THREADS, nBytes );
     upc_barrier;
 
+    //
+    // Copy data from local to global
+    //
     //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
-    //upc_barrier;
-
-    for (i=0;i<COUNT_PER_PE;i++) global[MYTHREAD*COUNT_PER_PE+i] = *local;
+    for (i=0;i<COUNT_PER_PE;i++) 
+      global[MYTHREAD*COUNT_PER_PE+i] = *local;
     upc_barrier;
 
 

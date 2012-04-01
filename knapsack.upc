@@ -230,8 +230,8 @@ int main( int argc, char** argv )
     // 
     // Test segment
     //
-    testArr  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
-    int *testArrLoc = (int*) malloc( nitems * sizeof(int) );
+    testArr  = (shared int *) upc_all_alloc( nitems * 1000, sizeof(int) );
+    int *testArrLoc = (int*) malloc( nitems * 1000 * sizeof(int) );
     if (MYTHREAD == 0) {
        for( int i = 0; i < nitems*(capacity+1); i++ ) {
          testArr[i] = 0;
@@ -253,8 +253,8 @@ int main( int argc, char** argv )
     upc_barrier;
 
     if (MYTHREAD == 0) {
-       for( int i = 0; i < nitems*(capacity+1); i++ ) {
-         printf("testArr at %d is %d \n", i, testArrLoc[i]);
+       for( int i = 0; i < nitems*1000; i++ ) {
+         printf("testArr at %d is %d \n", i, testArr[i]);
        }
     }
 

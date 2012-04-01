@@ -253,7 +253,7 @@ int main( int argc, char** argv )
     //
     // Copy data from local to global
     //
-    upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
+    upc_memput( (shared [4] void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
     //upc_all_gather_all(global, local, COUNT_PER_PE*sizeof(int), UPC_IN_NOSYNC);
     //for (i=0;i<COUNT_PER_PE;i++) 
     //  global[MYTHREAD*COUNT_PER_PE+i] = *local;

@@ -44,6 +44,7 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
 }
 
 
+// Once row 1 is done, row 2 can start.
 
 int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, int *v )
 {
@@ -70,6 +71,12 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
 	}
 	upc_memput( &T[startIdx], &Tlocal[startIdx], count*sizeof(int) );
 
+
+    	//for (i=0;i<COUNT_PER_PE;i++) 
+        //  global[MYTHREAD*COUNT_PER_PE+i] = *local;
+    	//upc_barrier;
+
+
         for( int i = wj + MYTHREAD; i <= cap; i = i+THREADS ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
 	
         upc_barrier;
@@ -80,7 +87,6 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
     return T[cap];
 }
 
-//printf("Thread no. is %d \n", upc_threadof(&T[i]));
 
 
 
@@ -236,7 +242,6 @@ int main( int argc, char** argv )
     local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
     for (int i=0;i<COUNT_PER_PE;i++) { 
       local[i] = MYTHREAD;
-      fprintf(fsave, "%d: local at %d is %d \n", MYTHREAD, i, local[i]);
     }
     upc_barrier;
 
@@ -247,7 +252,8 @@ int main( int argc, char** argv )
     //
     // Copy data from local to global
     //
-    upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
+    //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
+    upc_all_gather_all(global, local, COUNT_PER_PE*sizeof(int), UPC_IN_NOSYNC);
     //for (i=0;i<COUNT_PER_PE;i++) 
     //  global[MYTHREAD*COUNT_PER_PE+i] = *local;
     upc_barrier;

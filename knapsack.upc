@@ -237,7 +237,10 @@ int main( int argc, char** argv )
     //
 
     local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
-    for (int i=0;i<COUNT_PER_PE;i++) local[i] = MYTHREAD;
+    for (int i=0;i<COUNT_PER_PE;i++) { 
+      local[i] = MYTHREAD;
+      printf("local at %d is %d \n", i, local[i]);
+    }
     upc_barrier;
 
     size_t nBytes = sizeof(int) * THREADS * COUNT_PER_PE;

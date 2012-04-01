@@ -184,7 +184,7 @@ int main( int argc, char** argv )
     shared int *total;
 
     int* local;
-    shared [1] int *global=NULL;
+    shared [4] int *global=NULL;
 
 
 
@@ -247,9 +247,9 @@ int main( int argc, char** argv )
     //
     // Copy data from local to global
     //
-    //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
-    for (i=0;i<COUNT_PER_PE;i++) 
-      global[MYTHREAD*COUNT_PER_PE+i] = *local;
+    upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
+    //for (i=0;i<COUNT_PER_PE;i++) 
+    //  global[MYTHREAD*COUNT_PER_PE+i] = *local;
     upc_barrier;
 
 

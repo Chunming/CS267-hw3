@@ -184,7 +184,7 @@ int main( int argc, char** argv )
     shared int *total;
 
     int* local;
-    shared [4] int *global=NULL;
+    shared [1] int *global=NULL;
 
 
 
@@ -241,7 +241,7 @@ int main( int argc, char** argv )
     upc_barrier;
 
     size_t nBytes = sizeof(int) * THREADS * COUNT_PER_PE;
-    global  = (shared [4] int *) upc_all_alloc( THREADS, nBytes );
+    global  = (shared int *) upc_all_alloc( THREADS, nBytes );
     upc_barrier;
 
     //

@@ -162,7 +162,7 @@ int main( int argc, char** argv )
     //srand48( (unsigned int)time(NULL) + MYTHREAD );
     srand48( 1000 );    
 
-    //allocate distributed arrays, use cyclic distribution
+    // Allocate distributed arrays, use cyclic distribution
     weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
@@ -172,6 +172,20 @@ int main( int argc, char** argv )
         fprintf( stderr, "Failed to allocate memory" );
         upc_global_exit( -1 );
     }
+
+
+    upc_barrier;
+
+    //
+    // Allocate local arrays, use blocking
+    //
+    int *weightLoc = (int*) malloc( nitems * sizeof(int) );
+    int *valueLoc  = (int*) malloc( nitems * sizeof(int) );
+    int *usedLoc   = (int*) malloc( nitems * sizeof(int) );
+    int *totalLoc  = (int*) malloc( nitems * (capacity+1) * sizeof(int) );
+
+    upc_memget(weightLoc, weight, nitems*sizeof(int) );
+
 
     //FIX: 
     upc_barrier;

@@ -245,7 +245,7 @@ int main( int argc, char** argv )
     int interval = 250; // Round Up
     int startIdx = interval*MYTHREAD;
     for( int i = startIdx; i < startIdx+250 ;  i++ ) {
-      testArrLoc[i] = MYTHREAD;
+      testArrLoc[i] = MYTHREAD + 1;
     }
 
     upc_memput( testArr, &testArrLoc[startIdx], sizeof(int) );

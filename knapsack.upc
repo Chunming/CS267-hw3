@@ -174,7 +174,6 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 //
 //  benchmarking program
 //
-// No. of threads is 4 by default
 
 int main( int argc, char** argv )
 {
@@ -183,7 +182,6 @@ int main( int argc, char** argv )
     shared int *value;
     shared int *used;
     shared int *total;
-
 
     int* local;
     shared [1] int *global=NULL;
@@ -285,10 +283,7 @@ int main( int argc, char** argv )
     
     seconds = read_timer( ) - seconds;
 
-
-
-
-
+    upc_barrier;
     
     // check the result
     if( MYTHREAD == 0 )

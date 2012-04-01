@@ -103,7 +103,7 @@ int build_table( int nitems, int cap, shared int *T, shared int *w, shared int *
         vj = v[j];
         upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) { 
 	  T[i+cap+1] = T[i];
-	  printf("Thread no. is %d \n", upc_threadof(&T[i]));
+	  //printf("Thread no. is %d \n", upc_threadof(&T[i]));
 	}
         upc_forall( int i = wj; i <= cap; i++; &T[i] ) {
 	  T[i+cap+1] = max( T[i], T[i-wj]+vj );
@@ -246,7 +246,7 @@ int main( int argc, char** argv )
     int startIdx = interval*MYTHREAD;
     int count = 0;
     for( int i = startIdx; i <  min(startIdx+interval,(nitems*(capacity+1)));  i++ ) {
-      testArrLoc[i] = MYTHREAD;
+      testArrLoc[i] = MYTHREAD+1;
       count++;
     }
 

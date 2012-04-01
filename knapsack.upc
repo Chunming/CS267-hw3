@@ -226,16 +226,40 @@ int main( int argc, char** argv )
     int *totalLoc  = (int*) malloc( nitems * (capacity+1) * sizeof(int) );
 
     upc_barrier;
-    
-    
+
+    // 
+    // Test segment
+    //
     testArr  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
-    upc_memput( &T[startIdx], &Tlocal[startIdx], count*sizeof(int) );
+    int *testArrLoc = (int*) malloc( nitems * sizeof(int) );
     if (MYTHREAD == 0) {
        for( int i = 0; i < nitems*(capacity+1); i++ ) {
          testArr[i] = 0;
-	 printf("testArr at %d is %d \n", i, testArr[i]);
        }
     }
+
+    upc_barrier;
+
+
+    // Increase cache hits
+    int interval = ((nitems*(capacity+1))/THREADS); // Round Up
+    int startIdx = interval*MYTHREAD;
+    int count = 0;
+    for( int i = startIdx; i <  min(startIdx+interval,wj);  i++ ) {
+      testArrLoc[i] = MYTHREAD;
+      count++;
+    }
+
+    upc_memput( testArr, &testArrLoc[startIdx], count*sizeof(int) );
+
+    upc_barrier;
+
+    if (MYTHREAD == 0) {
+       for( int i = 0; i < nitems*(capacity+1); i++ ) {
+         printf("testArr at %d is %d \n", i, testArr[i]);
+       }
+    }
+
 
     upc_barrier; //FIX: 
    

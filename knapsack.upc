@@ -185,10 +185,13 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
     shared int *value;
     shared int *used;
     shared int *total;
-    shared [1] int *global=NULL;
 
 int main( int argc, char** argv )
 {
+
+    int* local;
+    shared [1] int *global=NULL;
+
    char *savename = read_string( argc, argv, "-o", NULL );
    FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
  
@@ -232,23 +235,16 @@ int main( int argc, char** argv )
     // 
     // Test segment
     //
-    size_t nBytes = sizeof(int) * THREADS * COUNT_PER_PE;
-    global  = (shared int *) upc_all_alloc( THREADS, nBytes );
 
     int* local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
     for (int i=0;i<COUNT_PER_PE;i++) local[i] = MYTHREAD;
+    upc_barrier;
 
-
-    if (MYTHREAD == 0) {
-       for( int i = 0; i < nitems*(capacity+1); i++ ) {
-         global[i] = 0;
-       }
-    }
-
+    size_t nBytes = sizeof(int) * THREADS * COUNT_PER_PE;
+    global  = (shared int *) upc_all_alloc( THREADS, nBytes );
     upc_barrier;
 
     upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
-
     upc_barrier;
 
     if (MYTHREAD == 0) {

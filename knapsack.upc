@@ -250,7 +250,7 @@ int main( int argc, char** argv )
       count++;
     }
 
-    upc_memput( testArr, &testArrLoc[startIdx], count*sizeof(int) );
+    upc_memput( testArr, &testArrLoc[startIdx], sizeof(int) );
 
     upc_barrier;
 

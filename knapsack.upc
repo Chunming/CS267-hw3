@@ -252,7 +252,7 @@ int main( int argc, char** argv )
     upc_barrier;
 
     if (MYTHREAD == 0) {
-       for( int i = 0; i < nitems*1000; i++ ) {
+       for( int i = 0; i < THREADS*COUNT_PER_PE; i++ ) {
          printf("global at %d is %d \n", i, global[i]);
        }
     }

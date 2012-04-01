@@ -244,8 +244,8 @@ int main( int argc, char** argv )
     global  = (shared int *) upc_all_alloc( THREADS, nBytes );
     upc_barrier;
 
-    //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
-    //upc_barrier;
+    upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
+    upc_barrier;
 
     if (MYTHREAD == 0) {
        for( int i = 0; i < THREADS*COUNT_PER_PE; i++ ) {

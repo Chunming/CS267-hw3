@@ -242,12 +242,10 @@ int main( int argc, char** argv )
 
 
     // Increase cache hits
-    int interval = ((nitems*(capacity+1))/THREADS); // Round Up
+    int interval = 250; // Round Up
     int startIdx = interval*MYTHREAD;
-    int count = 0;
-    for( int i = startIdx; i <  min(startIdx+interval,(nitems*(capacity+1)));  i++ ) {
-      testArrLoc[i] = 1;
-      count++;
+    for( int i = startIdx; i < startIdx+250 ;  i++ ) {
+      testArrLoc[i] = MYTHREAD;
     }
 
     upc_memput( testArr, &testArrLoc[startIdx], sizeof(int) );
@@ -256,7 +254,7 @@ int main( int argc, char** argv )
 
     if (MYTHREAD == 0) {
        for( int i = 0; i < nitems*(capacity+1); i++ ) {
-         printf("testArr at %d is %d \n", i, testArr[i]);
+         printf("testArr at %d is %d \n", i, testArrLoc[i]);
        }
     }
 

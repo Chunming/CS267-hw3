@@ -171,23 +171,19 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 }
 
 
-//shared int* sharedMem = upc_all_alloc(100, sizeof(int));
-
-
 //
 //  benchmarking program
 //
-//shared [1000] void weightLoc[1000*THREADS];
-
 // No. of threads is 4 by default
+
+int main( int argc, char** argv )
+{
 
     shared int *weight;
     shared int *value;
     shared int *used;
     shared int *total;
 
-int main( int argc, char** argv )
-{
 
     int* local;
     shared [1] int *global=NULL;

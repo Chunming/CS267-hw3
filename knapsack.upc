@@ -206,7 +206,7 @@ int main( int argc, char** argv )
     //upc_memget(weightLoc, weight, nitems*sizeof(int) );
     for (int j=0; j<nitems; j++) {
       weightLoc[j] = weight[j];
-      valueLoc[j] = value[j]
+      valueLoc[j] = value[j];
     }
 
     upc_barrier;

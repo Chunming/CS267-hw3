@@ -248,7 +248,7 @@ int main( int argc, char** argv )
       testArrLoc[i] = MYTHREAD + 1;
     }
 
-    upc_memput( testArr, &testArrLoc[startIdx], sizeof(int) );
+    upc_memput( testArr, &testArrLoc[startIdx], 1000*nitems*sizeof(int) );
 
     upc_barrier;
 

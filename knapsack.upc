@@ -246,7 +246,7 @@ int main( int argc, char** argv )
     int startIdx = interval*MYTHREAD;
     int count = 0;
     for( int i = startIdx; i <  min(startIdx+interval,(nitems*(capacity+1)));  i++ ) {
-      testArrLoc[i] = MYTHREAD+1;
+      testArrLoc[i] = 1;
       count++;
     }
 

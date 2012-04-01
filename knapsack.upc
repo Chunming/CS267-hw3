@@ -184,7 +184,6 @@ int main( int argc, char** argv )
     int *usedLoc   = (int*) malloc( nitems * sizeof(int) );
     int *totalLoc  = (int*) malloc( nitems * (capacity+1) * sizeof(int) );
 
-    upc_memget(weightLoc, weight, nitems*sizeof(int) );
 
 
     //FIX: 
@@ -203,9 +202,11 @@ int main( int argc, char** argv )
 
     upc_barrier;
 
-    //upc_memget(weightLoc, weight, 1000*sizeof(int));
 
-    //upc_barrier;
+    upc_memget(weightLoc, weight, nitems*sizeof(int) );
+
+
+    upc_barrier;
 
     
     // time the solution

@@ -203,11 +203,11 @@ int main( int argc, char** argv )
     upc_barrier;
 
 
+    //upc_memget(weightLoc, weight, nitems*sizeof(int) );
     for (int j=0; j<nitems; j++) {
       weightLoc[j] = weight[j];
+      valueLoc[j] = value[j]
     }
-    //upc_memget(weightLoc, weight, nitems*sizeof(int) );
-
 
     upc_barrier;
 
@@ -252,7 +252,7 @@ int main( int argc, char** argv )
 
       if (MYTHREAD == 0) {
         for (int j=0; j<nitems; j++) {
-          fprintf( fsave, "Index %d: %d %d\n", j, weightLoc[j], value[j]);
+          fprintf( fsave, "Index %d: %d %d\n", j, weightLoc[j], valueLoc[j]);
         }
       }
 

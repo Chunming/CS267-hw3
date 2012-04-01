@@ -3,6 +3,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <upc.h>
+#include <upc_collective.h>
 #include <string.h>
 
 #define COUNT_PER_PE 4

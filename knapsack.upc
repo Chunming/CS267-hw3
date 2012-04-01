@@ -42,6 +42,48 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
 }
 
 
+
+int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, int *v )
+{
+    int wj, vj;
+    
+    wj = w[0];
+    vj = v[0];
+    upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) T[i] = 0;
+    upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i] = vj;
+    upc_barrier;
+    
+    for( int j = 1; j < nitems; j++ )
+    {
+        wj = w[j];
+        vj = v[j];
+
+	// Increase cache hits
+	int interval = (wj/THREADS)+1; // Round Up
+	int startIdx = interval*MYTHREAD;
+	int count = 0;
+        for( int i = startIdx; i <  min(startIdx+interval,wj);  i++ ) {
+	  Tlocal[i+cap+1] = Tlocal[i];
+	  count++;
+	}
+	upc_memput( &T[startIdx], &Tlocal[startIdx], count*sizeof(int) );
+
+        for( int i = wj + MYTHREAD; i <= cap; i = i+THREADS ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
+	
+        upc_barrier;
+        
+        T += cap+1;
+    }
+    
+    return T[cap];
+}
+
+//printf("Thread no. is %d \n", upc_threadof(&T[i]));
+
+
+
+
+
 //
 //  solvers
 //
@@ -141,7 +183,7 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
     shared int *value;
     shared int *used;
     shared int *total;
-
+    shared int *testArr;
 
 int main( int argc, char** argv )
 {
@@ -173,7 +215,6 @@ int main( int argc, char** argv )
         upc_global_exit( -1 );
     }
 
-
     upc_barrier;
 
     //
@@ -184,10 +225,19 @@ int main( int argc, char** argv )
     int *usedLoc   = (int*) malloc( nitems * sizeof(int) );
     int *totalLoc  = (int*) malloc( nitems * (capacity+1) * sizeof(int) );
 
-
-
-    //FIX: 
     upc_barrier;
+    
+    
+    testArr  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
+    upc_memput( &T[startIdx], &Tlocal[startIdx], count*sizeof(int) );
+    if (MYTHREAD == 0) {
+       for( int i = 0; i < nitems*(capacity+1); i++ ) {
+         testArr[i] = 0;
+	 printf("testArr at %d is %d \n", i, testArr[i]);
+       }
+    }
+
+    upc_barrier; //FIX: 
    
     // 
     // Init. Prepare arrays in thread 0

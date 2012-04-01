@@ -186,6 +186,15 @@ int main( int argc, char** argv )
     int* local;
     shared [1] int *global=NULL;
 
+
+    local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
+    for (int i=0;i<COUNT_PER_PE;i++) { 
+      local[i] = MYTHREAD;
+      printf("%d: local at %d is %d \n", MYTHREAD, i, local[i]);
+    }
+    upc_barrier;
+
+
    char *savename = read_string( argc, argv, "-o", NULL );
    FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
  
@@ -230,12 +239,6 @@ int main( int argc, char** argv )
     // Test segment
     //
 
-    local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
-    for (int i=0;i<COUNT_PER_PE;i++) { 
-      local[i] = MYTHREAD;
-      printf("%d: local at %d is %d \n", MYTHREAD, i, local[i]);
-    }
-    upc_barrier;
 
     size_t nBytes = sizeof(int) * THREADS * COUNT_PER_PE;
     global  = (shared int *) upc_all_alloc( THREADS, nBytes );

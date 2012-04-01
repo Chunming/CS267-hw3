@@ -63,14 +63,14 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
         vj = v[j];
 
 	// 1st UPC for loop
-	int interval = (wj/THREADS)+1; // Round Up
-	int startIdx = interval*MYTHREAD;
-	int count = 0;
-        for( int i = startIdx; i <  min(startIdx+interval,wj);  i++ ) {
+	int interval1 = (wj/THREADS)+1; // Round Up
+	int startIdx1 = interval1*MYTHREAD;
+	int count1 = 0;
+        for( int i = startIdx1; i <  min(startIdx1+interval1,wj);  i++ ) {
 	  Tlocal[i+cap+1] = Tlocal[i];
-	  count++;
+	  count1++;
 	}
-    	for (int i=startIdx; i<(startIdx+count); i++) 
+    	for (int i=startIdx1; i<(startIdx1+count1); i++) 
           T[i] = Tlocal[i];
     	upc_barrier;
 
@@ -285,8 +285,6 @@ int main( int argc, char** argv )
 
     upc_barrier;
 
-
-    //upc_memget(weightLoc, weight, nitems*sizeof(int) );
     for (int j=0; j<nitems; j++) {
       weightLoc[j] = weight[j];
       valueLoc[j] = value[j];
@@ -298,7 +296,6 @@ int main( int argc, char** argv )
     // time the solution
     seconds = read_timer( );
     
-    best_value = build_table_local(nitems, capacity, total, totalLoc, weightLoc, valueLoc );
     //best_value = build_table( nitems, capacity, total, weight, value );
     backtrack( nitems, capacity, total, weight, used );
     

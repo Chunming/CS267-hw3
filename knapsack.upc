@@ -236,7 +236,7 @@ int main( int argc, char** argv )
     local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
     for (int i=0;i<COUNT_PER_PE;i++) { 
       local[i] = MYTHREAD;
-      printf("%d: local at %d is %d \n", MYTHREAD, i, local[i]);
+      fprintf(fsave, "%d: local at %d is %d \n", MYTHREAD, i, local[i]);
     }
     upc_barrier;
 
@@ -255,7 +255,7 @@ int main( int argc, char** argv )
 
     if (MYTHREAD == 0) {
        for( int i = 0; i < THREADS*COUNT_PER_PE; i++ ) {
-         printf("global at %d is %d \n", i, global[i]);
+         fprintf(fsave,"global at %d is %d \n", i, global[i]);
        }
     }
 

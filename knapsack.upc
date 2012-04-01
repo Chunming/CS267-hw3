@@ -230,7 +230,7 @@ int main( int argc, char** argv )
     // 
     // Test segment
     //
-    testArr  = (shared int *) upc_all_alloc( nitems * 1000, sizeof(int) );
+    testArr  = (shared int *) upc_all_alloc( THREADS * nitems * 250, sizeof(int) );
     int *testArrLoc = (int*) malloc( nitems * 1000 * sizeof(int) );
     if (MYTHREAD == 0) {
        for( int i = 0; i < nitems*(capacity+1); i++ ) {

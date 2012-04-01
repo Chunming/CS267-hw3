@@ -236,7 +236,7 @@ int main( int argc, char** argv )
     // Test segment
     //
 
-    int* local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
+    local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
     for (int i=0;i<COUNT_PER_PE;i++) local[i] = MYTHREAD;
     upc_barrier;
 

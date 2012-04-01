@@ -241,7 +241,7 @@ int main( int argc, char** argv )
     upc_barrier;
 
     size_t nBytes = sizeof(int) * THREADS * COUNT_PER_PE;
-    global  = (shared int *) upc_all_alloc( THREADS, 4*nBytes );
+    global  = (shared [4] int *) upc_all_alloc( THREADS, nBytes );
     upc_barrier;
 
     //

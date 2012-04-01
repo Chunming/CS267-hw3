@@ -183,7 +183,7 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
     shared int *value;
     shared int *used;
     shared int *total;
-    shared int *testArr;
+    shared [1] int *testArr=NULL;
 
 int main( int argc, char** argv )
 {
@@ -257,7 +257,6 @@ int main( int argc, char** argv )
          printf("testArr at %d is %d \n", i, testArr[i]);
        }
     }
-
 
     upc_barrier; //FIX: 
    

@@ -5,6 +5,8 @@
 #include <upc.h>
 #include <string.h>
 
+#define COUNT_PER_PE 4
+
 //
 // auxiliary functions
 //
@@ -183,7 +185,7 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
     shared int *value;
     shared int *used;
     shared int *total;
-    shared [1] int *testArr=NULL;
+    shared [1] int *global=NULL;
 
 int main( int argc, char** argv )
 {
@@ -230,31 +232,28 @@ int main( int argc, char** argv )
     // 
     // Test segment
     //
-    testArr  = (shared int *) upc_all_alloc( THREADS * nitems * 250, sizeof(int) );
-    int *testArrLoc = (int*) malloc( nitems * 1000 * sizeof(int) );
+    size_t nBytes = sizeof(int) * THREADS * COUNT_PER_PE;
+    global  = (shared int *) upc_all_alloc( THREADS, nBytes );
+
+    int* local = (int *)upc_alloc(sizeof(int)*COUNT_PER_PE);
+    for (int i=0;i<COUNT_PER_PE;i++) local[i] = MYTHREAD;
+
+
     if (MYTHREAD == 0) {
        for( int i = 0; i < nitems*(capacity+1); i++ ) {
-         testArr[i] = 0;
+         global[i] = 0;
        }
     }
 
     upc_barrier;
 
-
-    // Increase cache hits
-    int interval = 250; // Round Up
-    int startIdx = interval*MYTHREAD;
-    for( int i = startIdx; i < startIdx+250 ;  i++ ) {
-      testArrLoc[i] = MYTHREAD + 1;
-    }
-
-    upc_memput( testArr, &testArrLoc[startIdx], interval*sizeof(int) );
+    upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
 
     upc_barrier;
 
     if (MYTHREAD == 0) {
        for( int i = 0; i < nitems*1000; i++ ) {
-         printf("testArr at %d is %d \n", i, testArr[i]);
+         printf("global at %d is %d \n", i, global[i]);
        }
     }
 

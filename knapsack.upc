@@ -70,7 +70,7 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
 	  Tlocal[i+cap+1] = Tlocal[i];
 	  count++;
 	}
-    	for (i=startIdx; i<(startIdx+count); i++) 
+    	for (int i=startIdx; i<(startIdx+count); i++) 
           T[i] = Tlocal[i];
     	upc_barrier;
 
@@ -82,7 +82,7 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
         for( int i = startIdx2; i <= min(startIdx2+interval2, cap); i++ ) {
 	  Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
 	}
-    	for (i=startIdx2; i<(startIdx2+count2); i++) 
+    	for (int i=startIdx2; i<(startIdx2+count2); i++) 
           T[i] = Tlocal[i];
         upc_barrier;
         

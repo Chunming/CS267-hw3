@@ -248,7 +248,7 @@ int main( int argc, char** argv )
 
       if (MYTHREAD == 0) {
         for (int j=0; j<nitems; j++) {
-          fprintf( fsave, "Index %d: %d %d\n", j, weight[j], value[j]);
+          fprintf( fsave, "Index %d: %d %d\n", j, weightLoc[j], value[j]);
         }
       }
 
@@ -271,6 +271,11 @@ int main( int argc, char** argv )
         upc_free( value );
         upc_free( total );
         upc_free( used );
+
+	free( weightLoc );
+	free( valueLoc );
+	free( totalLoc );
+	free( usedLoc );
     }
     
     return 0;

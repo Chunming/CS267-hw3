@@ -190,7 +190,7 @@ int main( int argc, char** argv )
     shared int *used;
     shared int *total;
 
-    int* local;
+    shared int* local;
     shared [4] int *global=NULL;
 
 

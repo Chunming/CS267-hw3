@@ -293,7 +293,7 @@ int main( int argc, char** argv )
 
 
     if (MYTHREAD == 0) {
-       for( int i = 0; i < THREADS*COUNT_PER_PE; i++ ) {
+       for( int i = 0; i < THREADS*250; i++ ) {
          printf("global at %d is %d \n", i, global[i]);
        }
     }

@@ -155,7 +155,7 @@ int build_table( int nitems, int cap, shared int *T, shared int *w, shared int *
     return T[cap];
 }
 
-void backtrack( int nitems, int cap, shared int *T, shared int *w, shared int *u )
+void backtrack( int nitems, int cap, shared [250] int *T, shared int *w, shared int *u )
 {
     int i, j;
     

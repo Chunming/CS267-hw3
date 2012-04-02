@@ -55,70 +55,46 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
     wj = w[0];
     vj = v[0];
 
+    // Initialization stage    
     int interval = (cap/THREADS)+1; 
     int startIdx = interval*MYTHREAD;
     int count = 0;
-    for (int i=startIdx; i < min(wj,startIdx+interval); i++) { // 0-250
-      Tlocal[i] = 0;
-    }
-    
-    for (int i=wj; i <= min(cap,startIdx+interval); i++) {
-      Tlocal[i] = vj;
-    }
+
+    for (int i=startIdx; i < min(wj,startIdx+interval); i++) Tlocal[i] = 0;
+    for (int i=wj; i <= min(cap,startIdx+interval); i++) Tlocal[i] = vj;
 
     for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
     upc_barrier;
 
-     for( int j = 1; j < nitems; j++ )      
-     {
-         wj = w[j];
-         vj = v[j];
-         upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) T[i+cap+1] = T[i];
-         upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
-         upc_barrier;
-         
-         T += cap+1;
-     }
-     
-
-
-
-
-/*
     for( int j = 1; j < nitems; j++ )
     {
         wj = w[j];
         vj = v[j];
 
 	// 1st UPC for loop
-	int interval1 = (wj/THREADS)+1; // Round Up
-	int startIdx1 = interval1*MYTHREAD;
-	int count1 = 0;
-        for( int i = startIdx1; i <  min(startIdx1+interval1,wj);  i++ ) {
+        for( int i = startIdx; i <  min(startIdx+interval,wj); i++ ) {
 	  Tlocal[i+cap+1] = Tlocal[i];
-	  count1++;
 	}
-    	for (int i=startIdx1; i<(startIdx1+count1); i++) 
-          T[i] = Tlocal[i];
+        for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
     	upc_barrier;
 
-
 	// 2nd UPC for loop
-	int interval2 = ((cap - wj)/THREADS) + 1;
-	int startIdx2 = interval2*MYTHREAD; 
-	int count2 = 0;
-        for( int i = startIdx2; i <= min(startIdx2+interval2, cap); i++ ) {
-	  Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
+        for( int i = wj; i <= min(startIdx+interval, cap); i++ ) {
+	  if((i-wj)/interval != MYTHREAD ) {
+	    Tlocal[i-wj] = T[i-wj];
+	    Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
+	  }
+	  else { 
+	    Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
+	  }
 	}
-    	for (int i=startIdx2; i<(startIdx2+count2); i++) 
-          T[i] = Tlocal[i];
+
+
         upc_barrier;
         
         T += cap+1;
     }
 
-*/
-    
     return T[cap];
 }
 

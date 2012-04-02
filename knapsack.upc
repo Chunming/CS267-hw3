@@ -97,7 +97,7 @@ int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, in
 	upc_memput((shared void *) (T+startIdx+cap+1), (void *) (Tlocal+startIdx+cap+1), interval*sizeof(int));
 	
 
-        upc_memput((shared void*) (T+startIdx+cap+1), (void*) (Tlocal+startIdx+cap+1), 250*sizeof(int) );
+        //upc_memput((shared void*) (T+startIdx+cap+1), (void*) (Tlocal+startIdx+cap+1), 250*sizeof(int) );
 
         upc_barrier;
         

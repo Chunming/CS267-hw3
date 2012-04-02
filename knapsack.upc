@@ -54,8 +54,6 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
     
     wj = w[0];
     vj = v[0];
-    //upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) T[i] = 0;
-    //upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i] = vj;
 
     int interval = (cap/THREADS)+1; 
     int startIdx = interval*MYTHREAD;

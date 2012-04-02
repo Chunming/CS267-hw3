@@ -284,12 +284,6 @@ int main( int argc, char** argv )
         local += 999+1;
     }
 
-
-
-
-
-
-
     if (MYTHREAD == 0) {
        for( int i = 0; i < 10*1000; i++ ) { //10 instead of nitems
          fprintf(fsave, "global at %d is %d \n", i, global[i]);

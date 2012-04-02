@@ -206,6 +206,7 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 int main( int argc, char** argv )
 {
 
+    printf("Threads is %d\n", THREADS);
     shared int *weight;
     shared int *value;
     shared int *used;

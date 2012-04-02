@@ -1,23 +1,27 @@
 Warning: no access to tty (Bad file descriptor).
 Thus no job control in this shell.
-5000 items, capacity: 999, time: 0.198554
+Threads is 4
+Threads is 4
+Threads is 4
+Threads is 4
+5000 items, capacity: 999, time: 0.756072
 86 items used, value 55524, weight 999
-Application 6694945 resources: utime ~0s, stime ~0s
+Application 26599652 resources: utime 0, stime 0
 
  + --------------------------------------------------------------------------
  +        Job name: job-knapsack
- +          Job Id: 1472397.sdb
- +          System: hopper
- +     Queued Time: Sun Apr  1 23:52:15 2012
- +      Start Time: Sun Apr  1 23:52:39 2012
- + Completion Time: Sun Apr  1 23:52:42 2012
- +            User: cmel64
- +        MOM Host: nid04133
+ +          Job Id: 7555973.nid00003
+ +          System: franklin
+ +     Queued Time: Mon Apr  2 00:15:02 2012
+ +      Start Time: Mon Apr  2 00:15:21 2012
+ + Completion Time: Mon Apr  2 00:15:25 2012
+ +            User: cmchin
+ +        MOM Host: nid04096
  +           Queue: debug
- +  Req. Resources: other=QSUBPID:17283:hopper07,walltime=00:10:00
- +  Used Resources: cput=00:00:00,mem=0kb,vmem=0kb,walltime=00:00:03
+ +  Req. Resources: other=QSUBPID:11396:nid00092,walltime=00:10:00
+ +  Used Resources: cput=00:00:00,mem=132kb,vmem=940kb,walltime=00:00:04
  +     Acct String: mp309
- +   PBS_O_WORKDIR: /global/homes/c/cmel64/CS267-hw3
+ +   PBS_O_WORKDIR: /global/homes/c/cmchin/franklin/CS267-hw3
  +     Submit Args: job-knapsack
  + --------------------------------------------------------------------------
 

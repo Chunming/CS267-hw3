@@ -84,7 +84,6 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
     {
         wj = w[j];
         vj = v[j];
-
 	
 	// 1st UPC for loop
 	printf("%d, %d %d\n", MYTHREAD, startIdx, interval);
@@ -113,6 +112,7 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
         upc_barrier;
         
         T += cap+1;
+        Tlocal += cap+1;
     }
 
 

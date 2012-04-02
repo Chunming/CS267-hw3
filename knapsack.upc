@@ -66,6 +66,20 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
     for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
     upc_barrier;
 
+/*
+    for( int j = 1; j < nitems; j++ )
+    {
+        wj = w[j];
+        vj = v[j];
+        upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) T[i+cap+1] = T[i];
+        upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
+        upc_barrier;
+
+        T += cap+1;
+    }
+*/
+
+
     for( int j = 1; j < nitems; j++ )
     {
         wj = w[j];

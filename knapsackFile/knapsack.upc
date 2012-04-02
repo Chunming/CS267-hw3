@@ -60,17 +60,11 @@ int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, in
     int startIdx = interval*MYTHREAD;
     int count = 0;
 
-    memset ((void*) (Tlocal+startIdx), 0, min(startIdx+interval,wj)*sizeof(int));
+    for (int i=startIdx; i < min(wj,startIdx+interval); i++) Tlocal[i] = 0;
+    for (int i=wj; i <= min(cap,startIdx+interval); i++) Tlocal[i] = vj;
 
-
-    if (wj < startIdx + interval) {    
-	memset ((void*) (Tlocal+startIdx+wj), vj, (startIdx+interval-wj)*sizeof(int));
-    }
-
-    upc_memput((shared void *) (T+startIdx), (void *) (Tlocal+startIdx), interval*sizeof(int));
-
-    //upc_barrier;
-
+    for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
+    upc_barrier;
 
     for( int j = 1; j < nitems; j++ )
     {
@@ -78,26 +72,26 @@ int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, in
         vj = v[j];
 	
 	// 1st UPC for loop
-	memcpy ((void*) (Tlocal+startIdx+cap+1), (void *) (Tlocal+startIdx), min(startIdx+interval,wj)*sizeof(int));
-
-
+        for( int i = startIdx; i <  min(startIdx+interval,wj); i++ ) {
+	  Tlocal[i+cap+1] = Tlocal[i];
+	}
+        //for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
     	upc_barrier;
-
-
+	
 	// 2nd UPC for loop
-	upc_memget( (void*) (Tlocal+max(startIdx-wj, 0)), (shared void *) (T+max(startIdx-wj,0)), min(wj,startIdx)*sizeof(int)); 
-
-        for( int i = startIdx; i <= min(startIdx+interval, cap); i++ ) {
-	    if (wj <= i) {
-	       Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
-	    }
+        for( int i = wj; i <= min(startIdx+interval, cap); i++ ) {
+	  if((i-wj)/interval != MYTHREAD ) {
+	    Tlocal[i-wj] = T[i-wj];
+	    Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
+	  }
+	  else { 
+	    Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
+	  }
 	}
 
+        //for (int i=startIdx; i<(startIdx+interval); i++) T[i+cap+1] = Tlocal[i+cap+1];
+        upc_memput( (shared void*) (T+startIdx+cap+1), (void*) (Tlocal+startIdx+cap+1), 250*sizeof(int) );
 
-	upc_memput((shared void *) (T+startIdx+cap+1), (void *) (Tlocal+startIdx+cap+1), interval*sizeof(int));
-	
-
-        upc_memput((shared void*) (T+startIdx+cap+1), (void*) (Tlocal+startIdx+cap+1), 250*sizeof(int) );
 
         upc_barrier;
         
@@ -214,6 +208,9 @@ int main( int argc, char** argv )
     int* local;
     shared [250] int *global=NULL;
 
+
+
+
    char *savename = read_string( argc, argv, "-o", NULL );
    FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
  
@@ -287,7 +284,6 @@ int main( int argc, char** argv )
         local += 999+1;
     }
 
-/*
     if (MYTHREAD == 0) {
        for( int i = 0; i < 10*1000; i++ ) { //10 instead of nitems
          //fprintf(fsave, "global at %d is %d \n", i, global[i]);
@@ -295,12 +291,11 @@ int main( int argc, char** argv )
     }
 
     upc_barrier; //FIX: 
-  */
- 
+   
     // 
     // Init. Prepare arrays in thread 0
     //
-    max_weight = min( max_weight, capacity );  //do not generate items that don't fit into bag
+    max_weight = min( max_weight, capacity );//do not generate items that don't fit into bag
     if (MYTHREAD == 0) {
        for( int i = 0; i < nitems; i++ ) {
          weight[i] = 1 + (lrand48()%max_weight);
@@ -320,10 +315,9 @@ int main( int argc, char** argv )
     
     // time the solution
     seconds = read_timer( );
-   
- 
-    //best_value = build_table( nitems, capacity, total, weight, value );
+    
     best_value = build_table_local(nitems, capacity, total, totalLoc, weightLoc, valueLoc );
+    //best_value = build_table( nitems, capacity, total, weight, value );
     backtrack( nitems, capacity, total, weight, used );
     
     seconds = read_timer( ) - seconds;

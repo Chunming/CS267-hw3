@@ -243,14 +243,17 @@ int main( int argc, char** argv )
     }
 
     upc_barrier;
-
-    //
-    // Allocate local arrays, use blocking
-    //
+    
+    // Allocate local arrays, use blocking 
     int *weightLoc = (int*) malloc( nitems * sizeof(int) );
     int *valueLoc  = (int*) malloc( nitems * sizeof(int) );
     int *usedLoc   = (int*) malloc( nitems * sizeof(int) );
     int *totalLoc  = (int*) malloc( nitems * (capacity+1) * sizeof(int) );
+    if( !weightLoc || !valueLoc || !totalLoc || !usedLoc )
+    {
+        fprintf( stderr, "Failed to allocate local memory" );
+        upc_global_exit( -1 );
+    }
 
     upc_barrier;
 
@@ -293,9 +296,8 @@ int main( int argc, char** argv )
          //fprintf(fsave, "global at %d is %d \n", i, global[i]);
        }
     }
-
+*/
     upc_barrier; //FIX: 
-  */
  
     // 
     // Init. Prepare arrays in thread 0

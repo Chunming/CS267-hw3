@@ -66,20 +66,6 @@ int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, in
     for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
     upc_barrier;
 
-/*
-    for( int j = 1; j < nitems; j++ )
-    {
-        wj = w[j];
-        vj = v[j];
-        upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) T[i+cap+1] = T[i];
-        upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
-        upc_barrier;
-
-        T += cap+1;
-    }
-*/
-
-
     for( int j = 1; j < nitems; j++ )
     {
         wj = w[j];
@@ -283,13 +269,25 @@ int main( int argc, char** argv )
     //
     // Copy data from local to global
     //
-    upc_memput( (shared void*) (global+MYTHREAD*250), (void*) local, 250*sizeof(int) );
-    //upc_memput( (shared void*) (&T[cap+1]+MYTHREAD*interval), (void*) Tlocal, interval*sizeof(int) );
+    //upc_memput( (shared void*) (global+MYTHREAD*250), (void*) local, 250*sizeof(int) );
+    //upc_barrier;
 
-    //upc_all_gather_all(global, local, COUNT_PER_PE*sizeof(int), UPC_IN_NOSYNC);
-    //for (i=0;i<COUNT_PER_PE;i++) 
-    //  global[MYTHREAD*COUNT_PER_PE+i] = *local;
-    upc_barrier;
+    for( int j = 1; j < nitems; j++ )
+    {
+        for (int i=startIdx; i<(startIdx+250); i++) global[i+999+1] = local[i+999+1];
+        //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
+        //upc_memput( (shared void*) (&global[cap+1]+MYTHREAD*250), (void*) &local[cap+1], 250*sizeof(int) );
+
+        upc_barrier;
+        
+        global += cap+1;
+        local += cap+1;
+    }
+
+
+
+
+
 
 
     if (MYTHREAD == 0) {

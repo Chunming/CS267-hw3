@@ -48,7 +48,7 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
 // Once row 1 is done, row 2 can start.
 // Split based on capacity
 // Each thread will work on cap/THREADS no. of elements
-int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, int *v )
+int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, int *w, int *v )
 {
     int wj, vj;
     

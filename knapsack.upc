@@ -102,8 +102,11 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
 	    Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
 	  }
 	}
-        for (int i=startIdx; i<(startIdx+interval); i++) T[i+cap+1] = Tlocal[i+cap+1];
-        //upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
+
+        //for (int i=startIdx; i<(startIdx+interval); i++) T[i+cap+1] = Tlocal[i+cap+1];
+        //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
+        upc_memput( (shared void*) (&T[cap+1]+MYTHREAD*interval), (void*) Tlocal, interval*sizeof(int) );
+
 
         upc_barrier;
         
@@ -215,7 +218,7 @@ int main( int argc, char** argv )
     shared int *weight;
     shared int *value;
     shared int *used;
-    shared int *total;
+    shared [250] int *total;
 
     int* local;
     shared [4] int *global=NULL;
@@ -244,7 +247,7 @@ int main( int argc, char** argv )
     weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    total  = (shared int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
+    total  = (shared [250] int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
     if( !weight || !value || !total || !used )
     {
         fprintf( stderr, "Failed to allocate memory" );

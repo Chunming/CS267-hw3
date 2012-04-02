@@ -89,7 +89,7 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
         for( int i = startIdx; i <  min(startIdx+interval,wj); i++ ) {
 	  Tlocal[i+cap+1] = Tlocal[i];
 	}
-        for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
+        //for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
     	upc_barrier;
 	
 	// 2nd UPC for loop

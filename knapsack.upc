@@ -46,17 +46,47 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
 
 
 // Once row 1 is done, row 2 can start.
-
+// Split based on capacity
+// Each thread will work on cap/THREADS no. of elements
 int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, int *v )
 {
     int wj, vj;
     
     wj = w[0];
     vj = v[0];
-    upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) T[i] = 0;
-    upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i] = vj;
-    upc_barrier;
+    //upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) T[i] = 0;
+    //upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i] = vj;
+
+    int interval = (cap/THREADS)+1; 
+    int startIdx = interval*MYTHREAD;
+    int count = 0;
+    for (int i=startIdx; i < min(wj,startIdx+interval); i++) { // 0-250
+      Tlocal[i] = 0;
+    }
     
+    for (int i=wj; i <= min(cap,startIdx+interval); i++) {
+      Tlocal[i] = vj;
+    }
+
+    for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
+    upc_barrier;
+
+     for( int j = 1; j < nitems; j++ )      
+     {
+         wj = w[j];
+         vj = v[j];
+         upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) T[i+cap+1] = T[i];
+         upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
+         upc_barrier;
+         
+         T += cap+1;
+     }
+     
+
+
+
+
+/*
     for( int j = 1; j < nitems; j++ )
     {
         wj = w[j];
@@ -88,6 +118,8 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
         
         T += cap+1;
     }
+
+*/
     
     return T[cap];
 }
@@ -296,6 +328,7 @@ int main( int argc, char** argv )
     // time the solution
     seconds = read_timer( );
     
+    best_value = build_table_local(nitems, capacity, total, totalLoc, weightLoc, valueLoc );
     //best_value = build_table( nitems, capacity, total, weight, value );
     backtrack( nitems, capacity, total, weight, used );
     

@@ -274,7 +274,7 @@ int main( int argc, char** argv )
 
     for( int j = 1; j < nitems; j++ )
     {
-        for (int i=startIdx; i<(startIdx+250); i++) global[i+999+1] = local[i+999+1];
+        for (int i=MYTHREAD*250; i<(MYTHREAD*250+250); i++) global[i+999+1] = local[i+999+1];
         //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
         //upc_memput( (shared void*) (&global[cap+1]+MYTHREAD*250), (void*) &local[cap+1], 250*sizeof(int) );
 

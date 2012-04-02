@@ -232,7 +232,7 @@ int main( int argc, char** argv )
     weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    total  = (shared [250] int *) upc_all_alloc( nitems * (capacity+1) / 250, sizeof(int) * 250 );
+    total  = (shared [250] int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
     if( !weight || !value || !total || !used )
     {
         fprintf( stderr, "Failed to allocate memory" );

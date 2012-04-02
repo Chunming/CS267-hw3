@@ -226,7 +226,7 @@ int main( int argc, char** argv )
     int max_weight = 1000;
     
     //these set the problem size
-    int capacity   = 999; //9; //999;
+    int capacity   = 1999; //9; //999;
     int nitems     = 5000; //100; //5000;
     
     //srand48( (unsigned int)time(NULL) + MYTHREAD );

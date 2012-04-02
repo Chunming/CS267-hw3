@@ -61,33 +61,15 @@ int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, in
     int count = 0;
 
     memset ((void*) (Tlocal+startIdx), 0, min(startIdx+interval,wj)*sizeof(int));
-    //for (int i=startIdx; i < min(wj,startIdx+interval); i++) Tlocal[i] = 0;
 
 
     if (wj < startIdx + interval) {    
-	memset ((void*) (Tlocal+startIdx+wj), vj, (startIdx+interval)*sizeof(int));
+	memset ((void*) (Tlocal+startIdx+wj), vj, (startIdx+interval-wj)*sizeof(int));
     }
-
-    //for (int i=wj; i <= min(cap,startIdx+interval); i++) Tlocal[i] = vj;
 
     upc_memput((shared void *) (T+startIdx), (void *) (Tlocal+startIdx), interval*sizeof(int));
-    //for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
-    upc_barrier;
 
-/*
-    for( int j = 1; j < nitems; j++ )
-    {
-        wj = w[j];
-        vj = v[j];
-        upc_forall( int i = 0;  i <  wj;  i++; &T[i] ) T[i+cap+1] = T[i];
-        upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
-        upc_barrier;
-
-        T += cap+1;
-    }
-*/
-
-
+    //upc_barrier;
 
 
     for( int j = 1; j < nitems; j++ )
@@ -96,20 +78,12 @@ int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, in
         vj = v[j];
 	
 	// 1st UPC for loop
-
-        //for( int i = startIdx; i <  min(startIdx+interval,wj); i++ ) {
-	//  Tlocal[i+cap+1] = Tlocal[i];
-	//}
-
 	memcpy ((void*) (Tlocal+startIdx+cap+1), (void *) (Tlocal+startIdx), min(startIdx+interval,wj)*sizeof(int));
+
 
     	upc_barrier;
 
-       // for( int i = startIdx; i <  min(startIdx+interval,wj); i++ ) {
-//	  Tlocal[i+cap+1] = Tlocal[i];
-//	}
 
-	
 	// 2nd UPC for loop
 	upc_memget( (void*) (Tlocal+max(startIdx-wj, 0)), (shared void *) (T+max(startIdx-wj,0)), min(wj,startIdx)*sizeof(int)); 
 
@@ -120,26 +94,10 @@ int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, in
 	}
 
 
-/*
-	for( int i = wj; i <= min(startIdx+interval, cap); i++ ) {
-          if((i-wj)/interval != MYTHREAD ) {
-            Tlocal[i-wj] = T[i-wj];
-            Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
-          }
-          else {
-            Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
-          }
-        }
-
-*/
 	upc_memput((shared void *) (T+startIdx+cap+1), (void *) (Tlocal+startIdx+cap+1), interval*sizeof(int));
 	
-        //for (int i=startIdx; i<(startIdx+interval); i++) T[i+cap+1] = Tlocal[i+cap+1];
-        //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
-        //upc_memput( (shared void*) (&T[cap+1]+MYTHREAD*interval), (void*) Tlocal, interval*sizeof(int) );
 
-        //for (int i=startIdx; i<(startIdx+interval); i++) T[i+cap+1] = Tlocal[i+cap+1];
-        upc_memput( (shared void*) (T+startIdx+cap+1), (void*) (Tlocal+startIdx+cap+1), 250*sizeof(int) );
+        upc_memput((shared void*) (T+startIdx+cap+1), (void*) (Tlocal+startIdx+cap+1), 250*sizeof(int) );
 
         upc_barrier;
         

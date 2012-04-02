@@ -91,10 +91,8 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
 	}
         for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
     	upc_barrier;
-
 	
 	// 2nd UPC for loop
-	
         for( int i = wj; i <= min(startIdx+interval, cap); i++ ) {
 	  if((i-wj)/interval != MYTHREAD ) {
 	    Tlocal[i-wj] = T[i-wj];

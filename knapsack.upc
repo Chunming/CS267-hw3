@@ -86,14 +86,13 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
         vj = v[j];
 	
 	// 1st UPC for loop
-	printf("%d, %d %d\n", MYTHREAD, startIdx, interval);
         for( int i = startIdx; i <  min(startIdx+interval,wj); i++ ) {
 	  Tlocal[i+cap+1] = Tlocal[i];
 	}
         for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
     	upc_barrier;
 
-	/*
+	
 	// 2nd UPC for loop
 	
         for( int i = wj; i <= min(startIdx+interval, cap); i++ ) {
@@ -105,9 +104,9 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
 	    Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
 	  }
 	}
-	*/
+	
         //for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
-        upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
+        //upc_forall( int i = wj; i <= cap; i++; &T[i] ) T[i+cap+1] = max( T[i], T[i-wj]+vj );
 
         upc_barrier;
         

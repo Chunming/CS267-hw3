@@ -274,7 +274,7 @@ int main( int argc, char** argv )
 
 
 
-    for (int i=MYTHREAD*250; i<(MYTHREAD*250+250); i++) global[i] = local[i];
+    for (int i=MYTHREAD*250; i<(MYTHREAD*250+250); i++) global[i] = 0;
     for( int j = 1; j < 10; j++ ) // 10 instead of nitems
     {
         for (int i=MYTHREAD*250; i<(MYTHREAD*250+250); i++) global[i+999+1] = local[i+999+1];

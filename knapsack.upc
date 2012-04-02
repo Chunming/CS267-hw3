@@ -93,7 +93,7 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
     	upc_barrier;
 
 	// 2nd UPC for loop
-        for( int i = wj; i <= min(startIdx+interval, cap); i++ ) {
+        for( int i = wj; i <= startIdx+interval; i++ ) {
 	  if((i-wj)/interval != MYTHREAD ) {
 	    Tlocal[i-wj] = T[i-wj];
 	    Tlocal[i+cap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );

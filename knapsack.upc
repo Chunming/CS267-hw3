@@ -270,14 +270,14 @@ int main( int argc, char** argv )
     // Test segment
     //
 
-    local = (int *)malloc(sizeof(int)*250);
-    for (int i=0;i<250;i++) { 
-      local[i] = MYTHREAD;
+    local = (int *)malloc(sizeof(int)*5000*1000);
+    for (int i=0;i<5000*1000;i++) { 
+      local[i] = MYTHREAD*10000000+i;
     }
     upc_barrier;
 
-    size_t nBytes = sizeof(int) * THREADS * 250;
-    global  = (shared [250] int *) upc_all_alloc( THREADS, nBytes );
+    size_t nBytes = sizeof(int) * 250;
+    global  = (shared [250] int *) upc_all_alloc( 5000*1000/250, nBytes );
     upc_barrier;
 
     //

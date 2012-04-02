@@ -272,7 +272,7 @@ int main( int argc, char** argv )
     //upc_memput( (shared void*) (global+MYTHREAD*250), (void*) local, 250*sizeof(int) );
     //upc_barrier;
 
-    for( int j = 1; j < nitems; j++ )
+    for( int j = 1; j < 10; j++ ) // 10 instead of nitems
     {
         for (int i=MYTHREAD*250; i<(MYTHREAD*250+250); i++) global[i+999+1] = local[i+999+1];
         //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
@@ -291,7 +291,7 @@ int main( int argc, char** argv )
 
 
     if (MYTHREAD == 0) {
-       for( int i = 0; i < 5000*1000; i++ ) {
+       for( int i = 0; i < 10*1000; i++ ) { //10 instead of nitems
          fprintf(fsave, "global at %d is %d \n", i, global[i]);
        }
     }

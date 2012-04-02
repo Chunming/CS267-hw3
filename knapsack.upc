@@ -7,7 +7,7 @@
 #include <string.h>
 
 #define COUNT_PER_PE 4
-
+#define BLK_SIZE 125
 //
 // auxiliary functions
 //
@@ -48,7 +48,7 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
 // Once row 1 is done, row 2 can start.
 // Split based on capacity
 // Each thread will work on cap/THREADS no. of elements
-int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, int *w, int *v )
+int build_table_local( int nitems, int cap, shared [BLK_SIZE] int *T, int *Tlocal, int *w, int *v )
 {
     int wj, vj;
     
@@ -97,7 +97,7 @@ int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, in
 	upc_memput((shared void *) (T+startIdx+cap+1), (void *) (Tlocal+startIdx+cap+1), interval*sizeof(int));
 	
 
-        //upc_memput((shared void*) (T+startIdx+cap+1), (void*) (Tlocal+startIdx+cap+1), 250*sizeof(int) );
+        //upc_memput((shared void*) (T+startIdx+cap+1), (void*) (Tlocal+startIdx+cap+1), BLK_SIZE*sizeof(int) );
 
         upc_barrier;
         
@@ -146,7 +146,7 @@ int build_table( int nitems, int cap, shared int *T, shared int *w, shared int *
     return T[cap];
 }
 
-void backtrack( int nitems, int cap, shared [250] int *T, shared int *w, shared int *u )
+void backtrack( int nitems, int cap, shared [BLK_SIZE] int *T, shared int *w, shared int *u )
 {
     int i, j;
     
@@ -210,10 +210,10 @@ int main( int argc, char** argv )
     shared int *weight;
     shared int *value;
     shared int *used;
-    shared [250] int *total=NULL;
+    shared [BLK_SIZE] int *total=NULL;
 
     int* local;
-    shared [250] int *global=NULL;
+    shared [BLK_SIZE] int *global=NULL;
 
    char *savename = read_string( argc, argv, "-o", NULL );
    FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
@@ -236,7 +236,7 @@ int main( int argc, char** argv )
     weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    total  = (shared [250] int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
+    total  = (shared [BLK_SIZE] int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
     if( !weight || !value || !total || !used )
     {
         fprintf( stderr, "Failed to allocate memory" );
@@ -258,6 +258,7 @@ int main( int argc, char** argv )
 
     upc_barrier;
 
+/*
     // 
     // Test segment
     //
@@ -269,13 +270,12 @@ int main( int argc, char** argv )
     upc_barrier;
 
     size_t nBytes = sizeof(int);
-    global  = (shared [250] int *) upc_all_alloc( 5000*1000, nBytes ); // numBlocks, numBytes
+    global  = (shared [BLK_SIZE] int *) upc_all_alloc( 5000*1000, nBytes ); // numBlocks, numBytes
     upc_barrier;
 
     //
     // Copy data from local to global
     //
-    //upc_memput( (shared void*) (global+MYTHREAD*250), (void*) local, 250*sizeof(int) );
     //upc_barrier;
 
     for (int i=MYTHREAD*250; i<(MYTHREAD*250+250); i++) global[i] = 0;
@@ -291,7 +291,6 @@ int main( int argc, char** argv )
         local += 999+1;
     }
 
-/*
     if (MYTHREAD == 0) {
        for( int i = 0; i < 10*1000; i++ ) { //10 instead of nitems
          //fprintf(fsave, "global at %d is %d \n", i, global[i]);

@@ -1,31 +1,23 @@
 Warning: no access to tty (Bad file descriptor).
 Thus no job control in this shell.
-No. of threads is 4 
-No. of threads is 4 
-No. of threads is 4 
-No. of threads is 4 
-Current thread is 0 
-Current thread is 3 
-Current thread is 1 
-Current thread is 2 
-100 items, capacity: 9, time: 0.018287
-6 items used, value 4077, weight 9
-Application 26585883 resources: utime 0, stime 0
+5000 items, capacity: 999, time: 0.218474
+86 items used, value 55524, weight 999
+Application 6694838 resources: utime ~0s, stime ~0s
 
  + --------------------------------------------------------------------------
  +        Job name: job-knapsack
- +          Job Id: 7552961.nid00003
- +          System: franklin
- +     Queued Time: Sat Mar 31 00:28:43 2012
- +      Start Time: Sat Mar 31 00:29:04 2012
- + Completion Time: Sat Mar 31 00:29:06 2012
- +            User: cmchin
- +        MOM Host: nid04099
+ +          Job Id: 1472348.sdb
+ +          System: hopper
+ +     Queued Time: Sun Apr  1 23:29:59 2012
+ +      Start Time: Sun Apr  1 23:31:04 2012
+ + Completion Time: Sun Apr  1 23:31:08 2012
+ +            User: cmel64
+ +        MOM Host: nid05417
  +           Queue: debug
- +  Req. Resources: other=QSUBPID:39697:nid00256,walltime=00:10:00
- +  Used Resources: cput=00:00:00,mem=0kb,vmem=0kb,walltime=00:00:02
+ +  Req. Resources: other=QSUBPID:12312:hopper07,walltime=00:10:00
+ +  Used Resources: cput=00:00:00,mem=0kb,vmem=0kb,walltime=00:00:03
  +     Acct String: mp309
- +   PBS_O_WORKDIR: /global/homes/c/cmchin/franklin/CS267-hw3
+ +   PBS_O_WORKDIR: /global/homes/c/cmel64/CS267-hw3
  +     Submit Args: job-knapsack
  + --------------------------------------------------------------------------
 

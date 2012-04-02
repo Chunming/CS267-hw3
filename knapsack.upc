@@ -221,7 +221,7 @@ int main( int argc, char** argv )
     shared [250] int *total;
 
     int* local;
-    shared [4] int *global=NULL;
+    shared [250] int *global=NULL;
 
 
 
@@ -270,20 +270,20 @@ int main( int argc, char** argv )
     // Test segment
     //
 
-    local = (int *)malloc(sizeof(int)*COUNT_PER_PE);
-    for (int i=0;i<COUNT_PER_PE;i++) { 
+    local = (int *)malloc(sizeof(int)*250);
+    for (int i=0;i<250;i++) { 
       local[i] = MYTHREAD;
     }
     upc_barrier;
 
-    size_t nBytes = sizeof(int) * THREADS * COUNT_PER_PE;
-    global  = (shared [4] int *) upc_all_alloc( THREADS, nBytes );
+    size_t nBytes = sizeof(int) * THREADS * 250;
+    global  = (shared [250] int *) upc_all_alloc( THREADS, nBytes );
     upc_barrier;
 
     //
     // Copy data from local to global
     //
-    upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
+    upc_memput( (shared void*) (global+MYTHREAD*250), (void*) local, 250*sizeof(int) );
     //upc_memput( (shared void*) (&T[cap+1]+MYTHREAD*interval), (void*) Tlocal, interval*sizeof(int) );
 
     //upc_all_gather_all(global, local, COUNT_PER_PE*sizeof(int), UPC_IN_NOSYNC);

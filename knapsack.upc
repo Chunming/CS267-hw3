@@ -280,8 +280,8 @@ int main( int argc, char** argv )
 
         upc_barrier;
         
-        global += cap+1;
-        local += cap+1;
+        global += 999+1;
+        local += 999+1;
     }
 
 

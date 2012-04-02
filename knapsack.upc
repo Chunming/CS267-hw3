@@ -66,7 +66,7 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
     for (int i=startIdx; i<(startIdx+interval); i++) T[i] = Tlocal[i];
     upc_barrier;
 
-/*
+
     for( int j = 1; j < nitems; j++ )
     {
         wj = w[j];
@@ -77,9 +77,9 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
 
         T += cap+1;
     }
-*/
 
 
+/*
     for( int j = 1; j < nitems; j++ )
     {
         wj = w[j];
@@ -108,6 +108,7 @@ int build_table_local( int nitems, int cap, shared int *T, int *Tlocal, int *w, 
         
         T += cap+1;
     }
+*/
 
     return T[cap];
 }

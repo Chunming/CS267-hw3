@@ -103,9 +103,9 @@ int build_table_local( int nitems, int cap, shared [250] int *T, int *Tlocal, in
 	  }
 	}
 
-        for (int i=startIdx; i<(startIdx+interval); i++) T[i+cap+1] = Tlocal[i+cap+1];
+        //for (int i=startIdx; i<(startIdx+interval); i++) T[i+cap+1] = Tlocal[i+cap+1];
         //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
-        //upc_memput( (shared void*) (&T[cap+1]+MYTHREAD*250), (void*) &Tlocal[cap+1], 250*sizeof(int) );
+        upc_memput( (shared void*) (&T[cap+1]+MYTHREAD*250), (void*) &Tlocal[cap+1], 250*sizeof(int) );
 
 
         upc_barrier;
@@ -218,7 +218,7 @@ int main( int argc, char** argv )
     shared int *weight;
     shared int *value;
     shared int *used;
-    shared [250] int *total;
+    shared [250] int *total=NULL;
 
     int* local;
     shared [250] int *global=NULL;

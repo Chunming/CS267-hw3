@@ -49,7 +49,7 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
 // Once row 1 is done, row 2 can start.
 // Split based on capacity
 // Each thread will work on cap/THREADS no. of elements
-int build_table_local( int nitems, int cap, shared [BLK_SIZE] int *T, int *Tlocal, int *w, int *v )
+int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T, int *Tlocal, int *w, int *v )
 {
     int wj, vj;
     
@@ -107,7 +107,7 @@ int build_table_local( int nitems, int cap, shared [BLK_SIZE] int *T, int *Tloca
     }
 
 
-    return T[cap];
+    return T[padCap];
 }
 
 
@@ -330,7 +330,7 @@ int main( int argc, char** argv )
    
  
     //best_value = build_table( nitems, padCapacity, total, weight, value );
-    best_value = build_table_local(nitems, padCapacity, total, totalLoc, weightLoc, valueLoc );
+    best_value = build_table_local(nitems, capacity, padCapacity, total, totalLoc, weightLoc, valueLoc );
     backtrack( nitems, padCapacity, total, weight, used );
     
     seconds = read_timer( ) - seconds;

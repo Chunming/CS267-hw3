@@ -70,20 +70,20 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
 
     for( int j = 1; j < nitems; j++ )
     {
-        wj = w[j];
-        vj = v[j];
+        //wj = w[j];
+        //vj = v[j];
 	
 	// 1st UPC for loop
-	memcpy ((void*) (Tlocal+startIdx+padCap+1), (void *) (Tlocal+startIdx), min(startIdx+BLK_SIZE,wj)*sizeof(int));
+	memcpy ((void*) (Tlocal+startIdx+padCap+1), (void *) (Tlocal+startIdx), min(startIdx+BLK_SIZE,w[j])*sizeof(int));
 
     	//upc_barrier;
 
 	// 2nd UPC for loop
-	upc_memget( (void*) (Tlocal+max(startIdx-wj, 0)), (shared void *) (T+max(startIdx-wj,0)), min(wj,startIdx)*sizeof(int)); 
+	upc_memget( (void*) (Tlocal+max(startIdx-w[j], 0)), (shared void *) (T+max(startIdx-w[j],0)), min(w[j],startIdx)*sizeof(int)); 
 
         for( int i = startIdx; i <= min(startIdx+BLK_SIZE, padCap); i++ ) {
-	    if (wj <= i) {
-	       Tlocal[i+padCap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
+	    if (w[j] <= i) {
+	       Tlocal[i+padCap+1] = max( Tlocal[i], Tlocal[i-w[j]]+v[j] );
 	    }
 	}
 	upc_memput((shared void *) (T+startIdx+padCap+1), (void *) (Tlocal+startIdx+padCap+1), BLK_SIZE*sizeof(int));

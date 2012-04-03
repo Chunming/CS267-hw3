@@ -229,7 +229,7 @@ int main( int argc, char** argv )
     int capacity   = 999; //9; //999;
     int nitems     = 5000; //100; //5000;
     double mult = ((capacity+1)/THREADS) + 0.5;
-    printf ("mult is % d\n", mult)
+    printf ("mult is % d\n", mult);
 
     int padCapacity = (int)mult*THREADS; // Padded capacity should be a multiple of thread no.
     printf ("Padded capacity is %d \n", padCapacity);   

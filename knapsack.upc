@@ -60,10 +60,8 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
     // Initialization stage    
     //int interval = (padCap/THREADS)+1; // Replaced with BLK_SIZE 
     int startIdx = BLK_SIZE*MYTHREAD;
-    int count = 0;
 
     memset ((void*) (Tlocal+startIdx), 0, min(startIdx+BLK_SIZE,wj)*sizeof(int));
-
 
     if (wj < startIdx + BLK_SIZE) {    
 	memset ((void*) (Tlocal+startIdx+wj), vj, (startIdx+BLK_SIZE-wj)*sizeof(int));
@@ -198,7 +196,6 @@ int solve_serial( int nitems, int cap, shared int *w, shared int *v )
 int main( int argc, char** argv )
 {
 
-    printf("Threads is %d\n", THREADS);
     shared int *weight;
     shared int *value;
     shared int *used;
@@ -290,8 +287,6 @@ int main( int argc, char** argv )
     seconds = read_timer( ) - seconds;
 
     upc_barrier;
-   
-    printf("BEST value is %d\n", best_value);
  
     // check the result
     if( MYTHREAD == 0 )

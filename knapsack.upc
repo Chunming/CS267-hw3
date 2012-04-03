@@ -59,7 +59,7 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
 
     // Initialization stage    
     //int interval = (padCap/THREADS)+1; 
-    int startIdx = interval*MYTHREAD;
+    int startIdx = BLK_SIZE*MYTHREAD;
     int count = 0;
 
     memset ((void*) (Tlocal+startIdx), 0, min(startIdx+interval,wj)*sizeof(int));

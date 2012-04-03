@@ -66,7 +66,7 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
 	memset ((void*) (Tlocal+startIdx+w[0]), v[0], (startIdx+BLK_SIZE-w[0])*sizeof(int));
     }
 
-    upc_memput((shared void *) (T+startIdx), (void *) (Tlocal+startIdx), (BLK_SIZE)*sizeof(int)); // Can be changed to 0 to cap-w[j+1]
+    upc_memput((shared void *) (T+startIdx), (void *) (Tlocal+startIdx), min(BLK_SIZE, max(cap-w[1]-startIdx, 0))*sizeof(int)); // Can be changed to 0 to cap-w[j+1]
 
     for( int j = 1; j < nitems; j++ )
     {

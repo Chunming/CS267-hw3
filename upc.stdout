@@ -1,25 +1,61 @@
 Warning: no access to tty (Bad file descriptor).
 Thus no job control in this shell.
-Threads is 4
-Threads is 4
-Threads is 4
-Threads is 4
-5000 items, capacity: 999, time: 0.756072
+Threads is 8
+Threads is 8
+Threads is 8
+Threads is 8
+Threads is 8
+Threads is 8
+Threads is 8
+Threads is 8
+mult is  125
+mult is  125
+mult is  125
+Padded capacity is 999 
+Block size should be 125 
+Padded capacity is 999 
+Block size should be 125 
+mult is  125
+mult is  125
+Padded capacity is 999 
+Block size should be 125 
+mult is  125
+mult is  125
+mult is  125
+Padded capacity is 999 
+Block size should be 125 
+Padded capacity is 999 
+Block size should be 125 
+Padded capacity is 999 
+Block size should be 125 
+Padded capacity is 999 
+Block size should be 125 
+Padded capacity is 999 
+Block size should be 125 
+BEST value is 55524
+BEST value is 55524
+BEST value is 55524
+BEST value is 55524
+BEST value is 55524
+BEST value is 55524
+BEST value is 55524
+5000 items, capacity: 999, time: 0.995703
+BEST value is 55524
 86 items used, value 55524, weight 999
-Application 26599652 resources: utime 0, stime 0
+Application 26617281 resources: utime 0, stime 0
 
  + --------------------------------------------------------------------------
  +        Job name: job-knapsack
- +          Job Id: 7555973.nid00003
+ +          Job Id: 7558028.nid00003
  +          System: franklin
- +     Queued Time: Mon Apr  2 00:15:02 2012
- +      Start Time: Mon Apr  2 00:15:21 2012
- + Completion Time: Mon Apr  2 00:15:25 2012
+ +     Queued Time: Tue Apr  3 01:19:56 2012
+ +      Start Time: Tue Apr  3 01:20:17 2012
+ + Completion Time: Tue Apr  3 01:20:22 2012
  +            User: cmchin
- +        MOM Host: nid04096
+ +        MOM Host: nid00259
  +           Queue: debug
- +  Req. Resources: other=QSUBPID:11396:nid00092,walltime=00:10:00
- +  Used Resources: cput=00:00:00,mem=132kb,vmem=940kb,walltime=00:00:04
+ +  Req. Resources: other=QSUBPID:97194:nid00008,walltime=00:10:00
+ +  Used Resources: cput=00:00:00,mem=0kb,vmem=0kb,walltime=00:00:05
  +     Acct String: mp309
  +   PBS_O_WORKDIR: /global/homes/c/cmchin/franklin/CS267-hw3
  +     Submit Args: job-knapsack

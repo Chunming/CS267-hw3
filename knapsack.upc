@@ -309,7 +309,7 @@ int main( int argc, char** argv )
             printf( "WRONG SOLUTION 1: Best val frm parallel not equal to best val from serial\n" );
 	
         if( best_value != total_value )
-            printf( "WRONG SOLUTION 2: Best val not equal to total val\n" );
+            printf( "WRONG SOLUTION 2: Best val not equal to total val (Reasonable for padded capacity case)\n" );
 
         if( total_weight > padCapacity )
             printf( "WRONG SOLUTION 3: Total weight not larger than padded capacity\n" );

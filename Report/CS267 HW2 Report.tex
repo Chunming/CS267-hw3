@@ -39,7 +39,14 @@ Time required is reduced to 10.2737 when 2 $upc_forall$ loops are replaced by fo
 When the number of threads is 4 for a capacity of 1000, the block size is 250
 When the number of threads is 8 for a capacity of 1000, the block size is 125
 When the number of threads is 16 for a capacity of 1000, the block size is 63
-When the number of threads is 32 for a capacity of 1000, the block size is 31
+When the number of threads is 32 for a capacity of 1000, the block size is 32
 
+\section{Solution}
+We check the solution by breaking the if statement: 
+$if( best_value != best_value_serial || best_value != total_value || total_weight > capacity )$
+into 3 separate if statements:
 
+$ if( best_value != best_value_serial ) $
+$ if( best_value != total_value )$
+$ if( total_weight > padCapacity ) $ 
 \end{document}  

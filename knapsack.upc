@@ -7,7 +7,7 @@
 #include <string.h>
 
 #define COUNT_PER_PE 4
-#define BLK_SIZE 1000/THREADS 
+#define BLK_SIZE 250 
 //
 // auxiliary functions
 //
@@ -48,7 +48,7 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
 // Once row 1 is done, row 2 can start.
 // Split based on capacity
 // Each thread will work on cap/THREADS no. of elements
-int build_table_local( int nitems, int cap, shared [BLK_SIZE] int *T, int *Tlocal, int *w, int *v )
+int build_table_local( int nitems, int cap, shared [*] int *T, int *Tlocal, int *w, int *v )
 {
     int wj, vj;
     
@@ -146,7 +146,7 @@ int build_table( int nitems, int cap, shared int *T, shared int *w, shared int *
     return T[cap];
 }
 
-void backtrack( int nitems, int cap, shared [BLK_SIZE] int *T, shared int *w, shared int *u )
+void backtrack( int nitems, int cap, shared [*] int *T, shared int *w, shared int *u )
 {
     int i, j;
     
@@ -209,10 +209,10 @@ int main( int argc, char** argv )
     shared int *weight;
     shared int *value;
     shared int *used;
-    shared [BLK_SIZE] int *total=NULL;
+    shared [*] int *total=NULL;
 
     int* local;
-    shared [BLK_SIZE] int *global=NULL;
+    shared [*] int *global=NULL;
 
    char *savename = read_string( argc, argv, "-o", NULL );
    FILE *fsave = savename ? fopen( savename, "w" ) : NULL;
@@ -225,7 +225,7 @@ int main( int argc, char** argv )
     int max_weight = 1000;
     
     //these set the problem size
-    int capacity   = 1999; //9; //999;
+    int capacity   = 999; //9; //999;
     int nitems     = 5000; //100; //5000;
     
     //srand48( (unsigned int)time(NULL) + MYTHREAD );
@@ -235,7 +235,7 @@ int main( int argc, char** argv )
     weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    total  = (shared [BLK_SIZE] int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
+    total  = (shared [*] int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
     if( !weight || !value || !total || !used )
     {
         fprintf( stderr, "Failed to allocate memory" );
@@ -269,7 +269,7 @@ int main( int argc, char** argv )
     upc_barrier;
 
     size_t nBytes = sizeof(int);
-    global  = (shared [BLK_SIZE] int *) upc_all_alloc( 5000*1000, nBytes ); // numBlocks, numBytes
+    global  = (shared [*] int *) upc_all_alloc( 5000*1000, nBytes ); // numBlocks, numBytes
     upc_barrier;
 
     //

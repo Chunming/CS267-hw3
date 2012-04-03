@@ -58,7 +58,7 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
     vj = v[0];
 
     // Initialization stage    
-    //int interval = (padCap/THREADS)+1; 
+    //int interval = (padCap/THREADS)+1; // Replaced with BLK_SIZE 
     int startIdx = BLK_SIZE*MYTHREAD;
     int count = 0;
 
@@ -221,12 +221,14 @@ int main( int argc, char** argv )
     int capacity   = 999; //9; //999;
     int nitems     = 5000; //100; //5000;
     double mult = ceil(((double)capacity+1)/(double)THREADS);
-    printf ("mult is % d\n", (int)mult);
-
     int padCapacity = (int)mult*THREADS - 1; // Padded capacity should be a multiple of thread no.
-    printf ("Padded capacity is %d \n", padCapacity);   
-    printf ("Block size should be %d \n", (padCapacity+1)/THREADS);
-     
+
+    if (MYTHREAD == 1) {
+       printf ("mult is % d\n", (int)mult);
+       printf ("Padded capacity is %d \n", padCapacity);   
+       printf ("Block size should be %d \n", (padCapacity+1)/THREADS);
+    }
+
     //srand48( (unsigned int)time(NULL) + MYTHREAD );
     srand48( 1000 );    
 
@@ -256,46 +258,6 @@ int main( int argc, char** argv )
 
     upc_barrier;
 
-/*
-    // 
-    // Test segment
-    //
-
-    local = (int *)malloc(sizeof(int)*5000*1000);
-    for (int i=0;i<5000*1000;i++) { 
-      local[i] = MYTHREAD*10000000+i;
-    }
-    upc_barrier;
-
-    size_t nBytes = sizeof(int);
-    global  = (shared [BLK_SIZE] int *) upc_all_alloc( 5000*1000, nBytes ); // numBlocks, numBytes
-    upc_barrier;
-
-    //
-    // Copy data from local to global
-    //
-    //upc_barrier;
-
-    for (int i=MYTHREAD*250; i<(MYTHREAD*250+250); i++) global[i] = 0;
-    for( int j = 1; j < 10; j++ ) // 10 instead of nitems
-    {
-        for (int i=MYTHREAD*250; i<(MYTHREAD*250+250); i++) global[i+999+1] = local[i+999+1];
-        //upc_memput( (shared void*) (global+MYTHREAD*COUNT_PER_PE), (void*) local, COUNT_PER_PE*sizeof(int) );
-        //upc_memput( (shared void*) (&global[cap+1]+MYTHREAD*250), (void*) &local[cap+1], 250*sizeof(int) );
-
-        upc_barrier;
-        
-        global += 999+1;
-        local += 999+1;
-    }
-
-    if (MYTHREAD == 0) {
-       for( int i = 0; i < 10*1000; i++ ) { //10 instead of nitems
-         //fprintf(fsave, "global at %d is %d \n", i, global[i]);
-       }
-    }
-*/
-    upc_barrier; //FIX: 
  
     // 
     // Init. Prepare arrays in thread 0
@@ -319,10 +281,9 @@ int main( int argc, char** argv )
 
     
     // time the solution
+    // best_value = build_table( nitems, padCapacity, total, weight, value );
     seconds = read_timer( );
-   
- 
-    //best_value = build_table( nitems, padCapacity, total, weight, value );
+
     best_value = build_table_local(nitems, capacity, padCapacity, total, totalLoc, weightLoc, valueLoc );
     backtrack( nitems, padCapacity, total, weight, used );
     

@@ -30,7 +30,7 @@ We do blocking operations on rows of T (i.e. operating on contiguous blocks of m
 
 Next, we also considered pipelining our computations, because an object, j, is only dependent on its previous object j-1.
 
-\section{Results}
+\section{Timing}
 
 The time required for serial implementation is 0.031931
 The time required for upc implementation is 11.4287, 10.9262
@@ -41,12 +41,18 @@ When the number of threads is 8 for a capacity of 1000, the block size is 125
 When the number of threads is 16 for a capacity of 1000, the block size is 63
 When the number of threads is 32 for a capacity of 1000, the block size is 32
 
+\section{Generalized}
+We make the knapsack capacity an integer multiple of the number of threads so that the total array can be segmented equally into separate blocks, where each thread will operate on separate blocks.
+
 \section{Solution}
 We check the solution by breaking the if statement: 
 $if( best_value != best_value_serial || best_value != total_value || total_weight > capacity )$
 into 3 separate if statements:
 
-$ if( best_value != best_value_serial ) $
-$ if( best_value != total_value )$
-$ if( total_weight > padCapacity ) $ 
+$ if( best_value != best_value_serial ) printf( "WRONG SOLUTION: Best val frm parallel not equal to best val from serial" ); $
+$ if( best_value != total_value ) printf("WRONG SOLUTION: Best val not equal to total val")$
+$ if( total_weight > padCapacity ) printf( "WRONG SOLUTION: Total weight not larger than padded capacity" );$ 
+
+It is reasonable for the 2nd if statement to return true, since for the general padded capacity case, we may not be taking the last element in the T[i,j] table, hence we may miss items that are asserted in the used array. These are not included in the final answer because added such items will cause the weight to be larger than the actual capacity bound, even thought adding their weights is still within the padded capacity bound.
+
 \end{document}  

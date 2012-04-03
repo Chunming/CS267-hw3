@@ -7,7 +7,6 @@
 #include <upc_collective.h>
 #include <string.h>
 
-#define COUNT_PER_PE 4
 #define BLK_SIZE 167 
 
 //
@@ -54,17 +53,17 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
 {
     int wj, vj;
     
-    wj = w[0];
-    vj = v[0];
+    //wj = w[0];
+    //vj = v[0];
 
     // Initialization stage    
     //int interval = (padCap/THREADS)+1; // Replaced with BLK_SIZE 
     int startIdx = BLK_SIZE*MYTHREAD;
 
-    memset ((void*) (Tlocal+startIdx), 0, min(startIdx+BLK_SIZE,wj)*sizeof(int));
+    memset ((void*) (Tlocal+startIdx), 0, min(startIdx+BLK_SIZE,w[0])*sizeof(int));
 
-    if (wj < startIdx + BLK_SIZE) {    
-	memset ((void*) (Tlocal+startIdx+wj), vj, (startIdx+BLK_SIZE-wj)*sizeof(int));
+    if (w[0] < startIdx + BLK_SIZE) {    
+	memset ((void*) (Tlocal+startIdx+w[0]), vj, (startIdx+BLK_SIZE-w[0])*sizeof(int));
     }
 
     upc_memput((shared void *) (T+startIdx), (void *) (Tlocal+startIdx), BLK_SIZE*sizeof(int));

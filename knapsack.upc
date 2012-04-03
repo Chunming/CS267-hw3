@@ -229,8 +229,8 @@ int main( int argc, char** argv )
     //these set the problem size
     int capacity   = 999; //9; //999;
     int nitems     = 5000; //100; //5000;
-    int mult = (capacity+1)/THREADS;
-    int padCapacity = mult*THREADS; // Padded capacity should be a multiple of thread no.
+    double mult = ((capacity+1)/THREADS) + 0.5;
+    int padCapacity = (int)mult*THREADS; // Padded capacity should be a multiple of thread no.
     
     //srand48( (unsigned int)time(NULL) + MYTHREAD );
     srand48( 1000 );    

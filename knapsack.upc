@@ -234,7 +234,8 @@ int main( int argc, char** argv )
 
     int padCapacity = (int)mult*THREADS - 1; // Padded capacity should be a multiple of thread no.
     printf ("Padded capacity is %d \n", padCapacity);   
- 
+    printf ("Block size should be %d \n", padCapacity/THREADS);
+     
     //srand48( (unsigned int)time(NULL) + MYTHREAD );
     srand48( 1000 );    
 

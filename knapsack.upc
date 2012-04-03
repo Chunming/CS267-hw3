@@ -79,7 +79,7 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
 	// 1st UPC for loop
 	memcpy ((void*) (Tlocal+startIdx+padCap+1), (void *) (Tlocal+startIdx), min(startIdx+BLK_SIZE,wj)*sizeof(int));
 
-    	upc_barrier;
+    	//upc_barrier;
 
 	// 2nd UPC for loop
 	upc_memget( (void*) (Tlocal+max(startIdx-wj, 0)), (shared void *) (T+max(startIdx-wj,0)), min(wj,startIdx)*sizeof(int)); 

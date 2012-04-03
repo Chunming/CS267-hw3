@@ -7,7 +7,7 @@
 #include <string.h>
 
 #define COUNT_PER_PE 4
-#define BLK_SIZE 125 
+#define BLK_SIZE 63 
 
 //
 // auxiliary functions
@@ -229,7 +229,7 @@ int main( int argc, char** argv )
     //these set the problem size
     int capacity   = 999; //9; //999;
     int nitems     = 5000; //100; //5000;
-    double mult = ((capacity+1)/THREADS) + 0.5;
+    double mult = (((double)capacity+1)/(double)THREADS) + 0.5;
     printf ("mult is % d\n", (int)mult);
 
     int padCapacity = (int)mult*THREADS - 1; // Padded capacity should be a multiple of thread no.

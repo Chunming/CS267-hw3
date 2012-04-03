@@ -229,6 +229,8 @@ int main( int argc, char** argv )
     //these set the problem size
     int capacity   = 999; //9; //999;
     int nitems     = 5000; //100; //5000;
+    int mult = (capacity+1)/THREADS;
+    int padCapacity = mult*THREADS; // Padded capacity should be a multiple of thread no.
     
     //srand48( (unsigned int)time(NULL) + MYTHREAD );
     srand48( 1000 );    
@@ -237,7 +239,7 @@ int main( int argc, char** argv )
     weight = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     value  = (shared int *) upc_all_alloc( nitems, sizeof(int) );
     used   = (shared int *) upc_all_alloc( nitems, sizeof(int) );
-    total  = (shared [BLK_SIZE] int *) upc_all_alloc( nitems * (capacity+1), sizeof(int) );
+    total  = (shared [BLK_SIZE] int *) upc_all_alloc( nitems * (padCapacity+1), sizeof(int) );
     if( !weight || !value || !total || !used )
     {
         fprintf( stderr, "Failed to allocate memory" );
@@ -250,7 +252,7 @@ int main( int argc, char** argv )
     int *weightLoc = (int*) malloc( nitems * sizeof(int) );
     int *valueLoc  = (int*) malloc( nitems * sizeof(int) );
     int *usedLoc   = (int*) malloc( nitems * sizeof(int) );
-    int *totalLoc  = (int*) malloc( nitems * (capacity+1) * sizeof(int) );
+    int *totalLoc  = (int*) malloc( nitems * (padCapacity+1) * sizeof(int) );
     if( !weightLoc || !valueLoc || !totalLoc || !usedLoc )
     {
         fprintf( stderr, "Failed to allocate local memory" );
@@ -303,7 +305,7 @@ int main( int argc, char** argv )
     // 
     // Init. Prepare arrays in thread 0
     //
-    max_weight = min( max_weight, capacity );  //do not generate items that don't fit into bag
+    max_weight = min( max_weight, padCapacity );  //do not generate items that don't fit into bag
     if (MYTHREAD == 0) {
        for( int i = 0; i < nitems; i++ ) {
          weight[i] = 1 + (lrand48()%max_weight);
@@ -325,9 +327,9 @@ int main( int argc, char** argv )
     seconds = read_timer( );
    
  
-    //best_value = build_table( nitems, capacity, total, weight, value );
-    best_value = build_table_local(nitems, capacity, total, totalLoc, weightLoc, valueLoc );
-    backtrack( nitems, capacity, total, weight, used );
+    //best_value = build_table( nitems, padCapacity, total, weight, value );
+    best_value = build_table_local(nitems, padCapacity, total, totalLoc, weightLoc, valueLoc );
+    backtrack( nitems, padCapacity, total, weight, used );
     
     seconds = read_timer( ) - seconds;
 
@@ -336,9 +338,9 @@ int main( int argc, char** argv )
     // check the result
     if( MYTHREAD == 0 )
     {
-        printf( "%d items, capacity: %d, time: %g\n", nitems, capacity, seconds );
+        printf( "%d items, capacity: %d, time: %g\n", nitems, padCapacity, seconds );
         
-        best_value_serial = solve_serial( nitems, capacity, weight, value );
+        best_value_serial = solve_serial( nitems, padCapacity, weight, value );
         
         total_weight = nused = total_value = 0;
         for( i = 0; i < nitems; i++ )
@@ -351,7 +353,7 @@ int main( int argc, char** argv )
         
         printf( "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
         
-        if( best_value != best_value_serial || best_value != total_value || total_weight > capacity )
+        if( best_value != best_value_serial || best_value != total_value || total_weight > padCapacity )
             printf( "WRONG SOLUTION\n" );
 
 
@@ -368,7 +370,7 @@ int main( int argc, char** argv )
       //for (int j=0; j<nitems; j++) {
       //  fprintf( fsave, "Index %d: %d %d\n", j, weight[j], value[j]);
       //}
-      //for (int j=0; j<(nitems * (capacity+1)); j++) {
+      //for (int j=0; j<(nitems * (padCapacity+1)); j++) {
       //  fprintf( fsave, "Index %d: %d\n", total[j]); // Print total array
       //}
       fclose( fsave );

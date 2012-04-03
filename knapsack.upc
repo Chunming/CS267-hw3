@@ -66,7 +66,7 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
 	memset ((void*) (Tlocal+startIdx+w[0]), v[0], (startIdx+BLK_SIZE-w[0])*sizeof(int));
     }
 
-    upc_memput((shared void *) (T+startIdx), (void *) (Tlocal+startIdx), min(BLK_SIZE, min(cap-w[1]-startIdx, 0))*sizeof(int)); // Can be changed to 0 to cap-w[j+1]
+    upc_memput((shared void *) (T+startIdx), (void *) (Tlocal+startIdx), min(BLK_SIZE, min(padCap-w[1]-startIdx, 0))*sizeof(int)); // Can be changed to 0 to cap-w[j+1]
 
     for( int j = 1; j < nitems; j++ )
     {
@@ -86,7 +86,7 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
 	       Tlocal[i+padCap+1] = max( Tlocal[i], Tlocal[i-w[j]]+v[j] );
 	    }
 	}
-	upc_memput((shared void *) (T+startIdx+padCap+1), (void *) (Tlocal+startIdx+padCap+1), BLK_SIZE*sizeof(int));
+	upc_memput((shared void *) (T+startIdx+padCap+1), (void *) (Tlocal+startIdx+padCap+1), min(BLK_SIZE, min(cap) )*sizeof(int));
 
         upc_barrier;
         

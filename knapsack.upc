@@ -343,7 +343,7 @@ int main( int argc, char** argv )
     {
         printf( "%d items, capacity: %d, time: %g\n", nitems, padCapacity, seconds );
         
-        best_value_serial = solve_serial( nitems, padCapacity, weight, value );
+        best_value_serial = solve_serial( nitems, capacity, weight, value );
         
         total_weight = nused = total_value = 0;
         for( i = 0; i < nitems; i++ )

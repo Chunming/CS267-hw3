@@ -337,7 +337,9 @@ int main( int argc, char** argv )
     seconds = read_timer( ) - seconds;
 
     upc_barrier;
-    
+   
+    printf("BEST value is %d\n", best_value)
+ 
     // check the result
     if( MYTHREAD == 0 )
     {

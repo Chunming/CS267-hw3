@@ -1,9 +1,9 @@
 #PBS -l walltime=00:10:00
-#PBS -l mppwidth=4
+#PBS -l mppwidth=16
 #PBS -l mppnppn=1
 #PBS -j oe
 #PBS -V
 #PBS -o upc.stdout
 
 cd $PBS_O_WORKDIR
-aprun -n 4 -N 1 ./knapsack -o upc.txt
+aprun -n 16 -N 1 ./knapsack -o upc.txt

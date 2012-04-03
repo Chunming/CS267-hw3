@@ -55,4 +55,12 @@ $ if( total_weight > padCapacity ) printf( "WRONG SOLUTION: Total weight not lar
 
 It is reasonable for the 2nd if statement to return true, since for the general padded capacity case, we may not be taking the last element in the T[i,j] table, hence we may miss items that are asserted in the used array. These are not included in the final answer because added such items will cause the weight to be larger than the actual capacity bound, even thought adding their weights is still within the padded capacity bound.
 
+\section{Further Work}
+1. Only transfer data elements that would be used in the next iteration with memput and memget.
+2. Ensure you do not transfer elements from the global total array to the local total array, for those elements that are already updated by the current thread locally.
+3. Use SSE intrinsics to assign the values in local arrays using vectorization.
+4. Can we use the restrict keyword to optimize the code? 
+5. Run the compiler with the optimization flag -o3
+
+
 \end{document}  

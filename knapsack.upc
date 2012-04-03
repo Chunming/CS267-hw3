@@ -65,7 +65,7 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
     memset ((void*) (Tlocal+startIdx), 0, min(startIdx+BLK_SIZE,wj)*sizeof(int));
 
 
-    if (wj < startIdx + interval) {    
+    if (wj < startIdx + BLK_SIZE) {    
 	memset ((void*) (Tlocal+startIdx+wj), vj, (startIdx+BLK_SIZE-wj)*sizeof(int));
     }
 

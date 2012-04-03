@@ -306,13 +306,13 @@ int main( int argc, char** argv )
         printf( "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
         
         if( best_value != best_value_serial )
-            printf( "WRONG SOLUTION: Best val frm parallel not equal to best val from serial\n" );
+            printf( "WRONG SOLUTION 1: Best val frm parallel not equal to best val from serial\n" );
 	
         if( best_value != total_value )
-            printf( "WRONG SOLUTION: Best val not equal to total val\n" );
+            printf( "WRONG SOLUTION 2: Best val not equal to total val\n" );
 
         if( total_weight > padCapacity )
-            printf( "WRONG SOLUTION: Total weight not larger than padded capacity\n" );
+            printf( "WRONG SOLUTION 3: Total weight not larger than padded capacity\n" );
     if( fsave ) {
       fprintf(fsave, "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
 

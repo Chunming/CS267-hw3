@@ -231,7 +231,7 @@ int main( int argc, char** argv )
     double mult = ((capacity+1)/THREADS) + 0.5;
     printf ("mult is % d\n", mult);
 
-    int padCapacity = (int)mult*THREADS; // Padded capacity should be a multiple of thread no.
+    int padCapacity = (int)mult*THREADS - 1; // Padded capacity should be a multiple of thread no.
     printf ("Padded capacity is %d \n", padCapacity);   
  
     //srand48( (unsigned int)time(NULL) + MYTHREAD );

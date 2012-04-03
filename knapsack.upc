@@ -339,7 +339,7 @@ int main( int argc, char** argv )
 
     upc_barrier;
    
-    printf("BEST value is %d\n", best_value)
+    printf("BEST value is %d\n", best_value);
  
     // check the result
     if( MYTHREAD == 0 )
@@ -359,10 +359,14 @@ int main( int argc, char** argv )
         
         printf( "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
         
-        if( best_value != best_value_serial || best_value != total_value || total_weight > padCapacity )
-            printf( "WRONG SOLUTION\n" );
+        if( best_value != best_value_serial )
+            printf( "WRONG SOLUTION 1\n" );
+	
+        if( best_value != total_value )
+            printf( "WRONG SOLUTION 2\n" );
 
-
+        if( total_weight > padCapacity )
+            printf( "WRONG SOLUTION 3\n" );
     if( fsave ) {
       fprintf(fsave, "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
 

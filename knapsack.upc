@@ -7,7 +7,7 @@
 #include <upc_collective.h>
 #include <string.h>
 
-#define BLK_SIZE 167 
+#define BLK_SIZE 250 
 
 //
 // auxiliary functions

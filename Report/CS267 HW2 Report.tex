@@ -33,7 +33,7 @@ Next, we also considered pipelining our computations, because an object, j, is o
 \section{Timing}
 
 The time required for serial implementation is 0.031931
-The time required for upc implementation is 11.4287, 10.9262
+The time required for the knapsack-race.upc with race condition fixed is on average 10.9262
 Time required is reduced to 10.2737 when 2 $upc_forall$ loops are replaced by for loops 
 
 When the number of threads is 4 for a capacity of 1000, the block size is 250
@@ -53,7 +53,7 @@ $ if( best_value != best_value_serial ) printf( "WRONG SOLUTION: Best val frm pa
 $ if( best_value != total_value ) printf("WRONG SOLUTION: Best val not equal to total val")$
 $ if( total_weight > padCapacity ) printf( "WRONG SOLUTION: Total weight not larger than padded capacity" );$ 
 
-It is reasonable for the 2nd if statement to return true, since for the general padded capacity case, we may not be taking the last element in the T[i,j] table, hence we may miss items that are asserted in the used array. These are not included in the final answer because added such items will cause the weight to be larger than the actual capacity bound, even thought adding their weights is still within the padded capacity bound.
+It is reasonable for the 2nd if statement to return true, since for the general padded capacity case, we may not be taking the last element in the T[i,j] table, hence we may miss items that are asserted in the used array. These are not included in the final answer because added such items will cause the weight to be larger than the actual capacity bound, even thought adding their weights is still within the upper of bound of padded capacity.
 
 \section{Further Work}
 1. Only transfer data elements that would be used in the next iteration with memput and memget.

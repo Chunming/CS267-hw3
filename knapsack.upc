@@ -8,7 +8,7 @@
 #include <string.h>
 
 #define COUNT_PER_PE 4
-#define BLK_SIZE 125 
+#define BLK_SIZE 250 
 
 //
 // auxiliary functions

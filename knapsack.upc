@@ -333,7 +333,7 @@ int main( int argc, char** argv )
  
     //best_value = build_table( nitems, padCapacity, total, weight, value );
     best_value = build_table_local(nitems, capacity, padCapacity, total, totalLoc, weightLoc, valueLoc );
-    backtrack( nitems, capacity, total, weight, used );
+    backtrack( nitems, padCapacity, total, weight, used );
     
     seconds = read_timer( ) - seconds;
 

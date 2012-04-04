@@ -53,43 +53,83 @@ int build_table_local( int nitems, int cap, int padCap, shared [BLK_SIZE] int *T
 {
     int wj, vj;
     
-    //wj = w[0];
-    //vj = v[0];
+    wj = w[0];
+    vj = v[0];
 
     // Initialization stage    
     //int interval = (padCap/THREADS)+1; // Replaced with BLK_SIZE 
     int startIdx = BLK_SIZE*MYTHREAD;
 
-    memset ((void*) (Tlocal+startIdx), 0, min(startIdx+BLK_SIZE,w[0])*sizeof(int));
+    memset ((void*) (Tlocal+startIdx), 0, max(min(BLK_SIZE,wj-startIdx), 0)*sizeof(int));
 
-    if (w[0] < startIdx + BLK_SIZE) {    
-	memset ((void*) (Tlocal+startIdx+w[0]), v[0], (startIdx+BLK_SIZE-w[0])*sizeof(int));
+
+    if (wj < startIdx) {
+        memset ((void*) (Tlocal+startIdx), vj, BLK_SIZE*sizeof(int));
+    }
+    else if (wj < startIdx + BLK_SIZE) {
+         memset ((void*) (Tlocal+wj), vj, (startIdx+BLK_SIZE-wj)*sizeof(int));
     }
 
-    upc_memput((shared void *) (T+startIdx), (void *) (Tlocal+startIdx), min(BLK_SIZE, max(padCap-w[1]-startIdx, 0))*sizeof(int)); // Can be changed to 0 to cap-w[j+1]
+    upc_memput((shared void *) (T+startIdx), (void *) (Tlocal+startIdx), BLK_SIZE*sizeof(int));
 
-    for( int j = 1; j < nitems; j++ )
+/*
+    for( int j = 1; j < nitems-1; j+=2 )
     {
-        //wj = w[j];
-        //vj = v[j];
+        int w1 = w[j];
+        int v1 = v[j];
+
+	int w2 = w[j+1];
+	int v2 = v[j+1];
 	
-	// 1st UPC for loop
-	memcpy ((void*) (Tlocal+startIdx+padCap+1), (void *) (Tlocal+startIdx), min(startIdx+BLK_SIZE,w[j])*sizeof(int));
+	upc_memget( (void*) (Tlocal+max(startIdx-w1-w2, 0)), (shared void *) (T+max(startIdx-w1-w2,0)), min(w1+w2,startIdx)*sizeof(int)); 
 
-    	//upc_barrier;
+	int cpylength = max(min(BLK_SIZE+w2,w1-startIdx+w2), 0);
+	memcpy ((void*) (Tlocal+max(startIdx-w2,0)+padCap+1), (void *) (Tlocal+max(startIdx-w2,0)), cpylength*sizeof(int));
 
-	// 2nd UPC for loop
-	upc_memget( (void*) (Tlocal+max(startIdx-w[j], 0)), (shared void *) (T+max(startIdx-w[j],0)), min(w[j],startIdx)*sizeof(int)); 
-
-        for( int i = startIdx; i <= min(startIdx+BLK_SIZE, padCap); i++ ) {
-	    if (w[j] <= i) {
-	       Tlocal[i+padCap+1] = max( Tlocal[i], Tlocal[i-w[j]]+v[j] );
-	    }
+        for( int i = max(startIdx-w2, w1); i < startIdx+BLK_SIZE; i++ ) {
+	    Tlocal[i+padCap+1] = max( Tlocal[i], Tlocal[i-w1]+v1 );
 	}
+
 	upc_memput((shared void *) (T+startIdx+padCap+1), (void *) (Tlocal+startIdx+padCap+1), BLK_SIZE*sizeof(int));
+
+        memcpy ((void*) (Tlocal+startIdx+2*padCap+2), (void *) (Tlocal+startIdx+padCap+1), max(min(BLK_SIZE,w2-startIdx), 0)*sizeof(int));
+
+        for( int i = max(startIdx, w2); i < startIdx+BLK_SIZE; i++ ) {
+            Tlocal[i+2*padCap+2] = max( Tlocal[i+padCap+1], Tlocal[i-w2+padCap+1]+v2 );
+        }
+
+
+
+	upc_memput((shared void *) (T+startIdx+2*padCap+2), (void *) (Tlocal+startIdx+2*padCap+2), BLK_SIZE*sizeof(int));
 
         upc_barrier;
         
+        T += 2*padCap+2;
+        Tlocal += 2*padCap+2;
+    }
+*/
+
+    for( int j = 1; j < nitems; j++ )
+    {
+        wj = w[j];
+        vj = v[j];
+
+        // 1st UPC for loop
+        memcpy ((void*) (Tlocal+startIdx+padCap+1), (void *) (Tlocal+startIdx), max(min(BLK_SIZE,wj-startIdx), 0)*sizeof(int));
+
+        //upc_barrier;
+
+        // 2nd UPC for loop
+        upc_memget( (void*) (Tlocal+max(startIdx-wj, 0)), (shared void *) (T+max(startIdx-wj,0)), min(wj,startIdx)*sizeof(int));
+
+        for( int i = max(startIdx, wj); i < startIdx+BLK_SIZE; i++ ) {
+            Tlocal[i+padCap+1] = max( Tlocal[i], Tlocal[i-wj]+vj );
+        }
+
+        upc_memput((shared void *) (T+startIdx+padCap+1), (void *) (Tlocal+startIdx+padCap+1), BLK_SIZE*sizeof(int));
+
+        upc_barrier;
+
         T += padCap+1;
         Tlocal += padCap+1;
     }
@@ -306,13 +346,13 @@ int main( int argc, char** argv )
         printf( "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
         
         if( best_value != best_value_serial )
-            printf( "WRONG SOLUTION 1: Best val frm parallel not equal to best val from serial\n" );
+            printf( "WRONG SOLUTION 1: Best val frm parallel not equal to best val from serial... best_value %d, best_serial %d \n", best_value, best_value_serial );
 	
         if( best_value != total_value )
-            printf( "WRONG SOLUTION 2: Best val not equal to total val (Reasonable for padded capacity case)\n" );
+            printf( "WRONG SOLUTION 2: Best val not equal to total val (Reasonable for padded capacity case).. best_value %d, total_value %d\n", best_value, total_value );
 
         if( total_weight > padCapacity )
-            printf( "WRONG SOLUTION 3: Total weight not larger than padded capacity\n" );
+            printf( "WRONG SOLUTION 3: Total weight not larger than padded capacity.. total_weight %d, padCapacity %d \n", total_weight, padCapacity );
     if( fsave ) {
       fprintf(fsave, "%d items used, value %d, weight %d\n", nused, total_value, total_weight );
 

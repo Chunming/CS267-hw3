@@ -7,7 +7,7 @@
 #include <upc_collective.h>
 #include <string.h>
 
-#define BLK_SIZE 250 
+#define BLK_SIZE 42 
 
 //
 // auxiliary functions
@@ -259,8 +259,9 @@ int main( int argc, char** argv )
     double mult = ceil(((double)capacity+1)/(double)THREADS);
     int padCapacity = (int)mult*THREADS - 1; // Padded capacity should be a multiple of thread no.
 
-    if (MYTHREAD == 1) {
+    if (MYTHREAD == 0) {
        printf ("mult is % d\n", (int)mult);
+       printf ("No. of threads is % d\n", THREADS);
        printf ("Padded capacity is %d \n", padCapacity);   
        printf ("Block size should be %d \n", (padCapacity+1)/THREADS);
     }
